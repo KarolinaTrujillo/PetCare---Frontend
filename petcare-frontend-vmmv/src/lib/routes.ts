@@ -3,6 +3,7 @@ export const ROUTES = {
     HOME: '/',
     LOGIN: '/login',
     REGISTER: '/register',
+    AGENDAR_CITA: '/agendar-cita',
   },
   CLIENTE: {
     DASHBOARD: '/cliente/dashboard',

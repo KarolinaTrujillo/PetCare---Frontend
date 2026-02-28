@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
 
 export default function FinalCTA() {
   return (
@@ -16,10 +17,10 @@ export default function FinalCTA() {
           </p>
 
           <Link
-            href="/ElegirServicio"
+            href={ROUTES.PUBLIC.AGENDAR_CITA}
             className="h-12 px-10 rounded-xl bg-white text-[#2F8F83] font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center"
           >
-            Agendar cita de seguimiento
+            Agendar Cita
           </Link>
         </div>
       </div>
