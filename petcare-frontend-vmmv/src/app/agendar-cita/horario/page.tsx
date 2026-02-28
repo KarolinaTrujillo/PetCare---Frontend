@@ -9,11 +9,17 @@ export default function HorarioPage() {
   const router = useRouter();
   const { fecha, horario, setHorario } = useAgendarCita();
 
+  // 🔒 Protección de flujo
   useEffect(() => {
     if (!fecha) {
       router.replace(ROUTES.PUBLIC.AGENDAR_CITA_FECHA);
     }
   }, [fecha, router]);
+
+  // 🧠 Si cambia la fecha, limpiamos horario seleccionado
+  useEffect(() => {
+    setHorario(null);
+  }, [fecha, setHorario]);
 
   const horariosDisponibles = [
     "09:00 - 09:30",
@@ -30,7 +36,7 @@ export default function HorarioPage() {
     "17:30 - 18:00",
   ];
 
-  const isValid = !!horario;
+  const isValid = Boolean(horario);
 
   return (
     <>
@@ -39,18 +45,25 @@ export default function HorarioPage() {
       </h1>
 
       <p className="text-sm text-[#64748B] text-center mb-10">
-        Selecciona un horario disponible.
+        Selecciona un horario disponible para el día elegido.
       </p>
 
+      {/* Fecha seleccionada */}
+      <div className="mb-6 text-center text-sm text-[#2F8F83] font-medium">
+        Fecha seleccionada: {fecha}
+      </div>
+
+      {/* Grid horarios */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
         {horariosDisponibles.map((hora) => (
           <button
             key={hora}
+            type="button"
             onClick={() => setHorario(hora)}
-            className={`h-11 rounded-xl text-sm font-medium transition
+            className={`h-11 rounded-xl text-sm font-medium transition-all duration-200
               ${
                 horario === hora
-                  ? "bg-[#2F8F83] text-white"
+                  ? "bg-[#2F8F83] text-white shadow-md"
                   : "bg-gray-100 hover:bg-[#E6F4F2]"
               }
             `}
@@ -60,20 +73,26 @@ export default function HorarioPage() {
         ))}
       </div>
 
+      {/* Botones navegación */}
       <div className="flex justify-between">
         <button
+          type="button"
           onClick={() => router.push(ROUTES.PUBLIC.AGENDAR_CITA_FECHA)}
-          className="text-sm text-[#64748B]"
+          className="text-sm text-[#64748B] hover:text-[#1E293B] transition"
         >
           ← Volver
         </button>
 
         <button
+          type="button"
           disabled={!isValid}
-          className={`h-12 px-10 rounded-xl font-medium text-sm
+          onClick={() =>
+            router.push(ROUTES.PUBLIC.AGENDAR_CITA_RESUMEN)
+          }
+          className={`h-12 px-10 rounded-xl font-medium text-sm transition-all
             ${
               isValid
-                ? "bg-[#2F8F83] text-white"
+                ? "bg-[#2F8F83] text-white hover:bg-[#287A70]"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
             }
           `}
