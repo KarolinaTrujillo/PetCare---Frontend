@@ -38,6 +38,9 @@ interface AgendarCitaContextType {
   fecha: string | null;
   setFecha: (f: string | null) => void;
 
+  horario: string | null;
+  setHorario: (h: string | null) => void;
+
   resetFlow: () => void;
 }
 
@@ -67,6 +70,7 @@ export function AgendarCitaProvider({
   const [nombreMascota, setNombreMascota] = useState("");
   const [raza, setRaza] = useState("");
   const [fecha, setFecha] = useState<string | null>(null);
+  const [horario, setHorario] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("agendarCitaFlow");
@@ -83,6 +87,7 @@ export function AgendarCitaProvider({
       setNombreMascota(data.nombreMascota || "");
       setRaza(data.raza || "");
       setFecha(data.fecha || null);
+      setHorario(data.horario || null);
     }
   }, []);
 
@@ -101,6 +106,7 @@ export function AgendarCitaProvider({
         nombreMascota,
         raza,
         fecha,
+        horario,
       })
     );
   }, [
@@ -115,6 +121,7 @@ export function AgendarCitaProvider({
     nombreMascota,
     raza,
     fecha,
+    horario,
   ]);
 
   const resetFlow = () => {
@@ -146,6 +153,8 @@ export function AgendarCitaProvider({
         setRaza,
         fecha,
         setFecha,
+        horario,
+        setHorario,
         resetFlow,
       }}
     >

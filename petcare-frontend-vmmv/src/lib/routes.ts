@@ -6,6 +6,7 @@ export const ROUTES = {
     AGENDAR_CITA: '/agendar-cita',
     AGENDAR_CITA_MASCOTA: '/agendar-cita/mascota',
     AGENDAR_CITA_FECHA: "/agendar-cita/fecha",
+    AGENDAR_CITA_HORARIO: "/agendar-cita/horario",
 
     // 🔹 Flujo agendar cita
     AGENDAR_CITA_SERVICIO: '/agendar-cita/servicio',
