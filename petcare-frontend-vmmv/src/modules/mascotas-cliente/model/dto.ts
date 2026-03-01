@@ -6,3 +6,6 @@ export interface MascotaDTO {
   especie: EspecieDTO;
   edad: number;
 }
+
+
+
