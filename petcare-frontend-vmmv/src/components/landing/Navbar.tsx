@@ -4,37 +4,38 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <header className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="#inicio" className="text-lg font-semibold text-gray-900">
-          Pet<span className="text-primary-600">Care</span>
+
+        <Link href="#inicio" className="text-xl font-semibold text-gray-900">
+          Pet<span className="text-emerald-600">Care</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-          <Link href="#inicio" className="hover:text-primary-600 transition">
+        <nav className="hidden md:flex items-center gap-10 text-sm font-medium text-gray-600">
+          <Link href="#inicio" className="hover:text-emerald-600 transition">
             Inicio
           </Link>
-          <Link href="#servicios" className="hover:text-primary-600 transition">
+          <Link href="#servicios" className="hover:text-emerald-600 transition">
             Servicios
           </Link>
-          <Link href="#como-funciona" className="hover:text-primary-600 transition">
+          <Link href="#como-funciona" className="hover:text-emerald-600 transition">
             Cómo funciona
           </Link>
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Link
-            href="/register"
-            className="bg-primary-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-primary-700 transition"
+            href="/login"
+            className="px-5 py-2 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
           >
-            Regístrate
+            Acceso Cliente
           </Link>
 
           <Link
-            href="/login"
-            className="border border-primary-600 text-primary-600 px-5 py-2 rounded-xl text-sm font-medium hover:bg-primary-50 transition"
+            href="/register"
+            className="px-5 py-2 rounded-xl text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm"
           >
-            Acceso Cliente
+            Crear cuenta
           </Link>
         </div>
       </div>

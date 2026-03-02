@@ -1,10 +1,8 @@
 import './globals.css';
-import Navbar from '@/components/landing/Navbar';
-import Footer from '@/components/landing/Footer';
 
 export const metadata = {
   title: 'PetCare',
-  description: 'Plataforma digital de seguimiento post-consulta veterinaria',
+  description: 'Plataforma digital de seguimiento veterinario',
 };
 
 export default function RootLayout({
@@ -15,11 +13,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="scroll-smooth bg-white text-gray-900">
-        <Navbar />
-        <main className="pt-24">
-          {children}
-        </main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
