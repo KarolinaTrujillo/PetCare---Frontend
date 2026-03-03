@@ -8,7 +8,7 @@ const C = {
   textMain: "#1F2937",
 };
 
-export function ClienteMascotasPage() {
+export default function ClienteDashboardPage() {
   const [showModal, setShowModal] = useState(false);
   const [nombre, setNombre] = useState("");
   const [especie, setEspecie] = useState("Perro");
