@@ -1,47 +1,46 @@
 "use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
-
-type ServiceType = "chequeo" | "grooming" | null;
+import { Servicio, Veterinario, Mascota } from "./types";
 
 interface AgendarCitaContextType {
-  service: ServiceType;
-  setService: (s: ServiceType) => void;
-
+  selectedService: Servicio | null;
+  setSelectedService: (s: Servicio | null) => void;
+  
+  selectedVeterinario: Veterinario | null;
+  setSelectedVeterinario: (v: Veterinario | null) => void;
+  
+  selectedFecha: string | null;
+  setSelectedFecha: (f: string | null) => void;
+  
+  selectedHorario: string | null;
+  setSelectedHorario: (h: string | null) => void;
+  
+  selectedMascota: Mascota | null;
+  setSelectedMascota: (m: Mascota | null) => void;
+  
   motivo: string;
   setMotivo: (m: string) => void;
-
-  groomingOption: string;
-  setGroomingOption: (g: string) => void;
-
+  
+  // Datos del usuario
   email: string;
   setEmail: (e: string) => void;
-
   nombre: string;
   setNombre: (n: string) => void;
-
   apellido: string;
   setApellido: (a: string) => void;
-
   telefono: string;
   setTelefono: (t: string) => void;
-
-  especie: "perro" | "gato" | null;
-  setEspecie: (e: "perro" | "gato" | null) => void;
-
+  
+  // Datos de la mascota (para usuarios nuevos)
+  especie: string;
+  setEspecie: (e: string) => void;
   nombreMascota: string;
   setNombreMascota: (n: string) => void;
-
   raza: string;
   setRaza: (r: string) => void;
-
-  fecha: string | null;
-  setFecha: (f: string | null) => void;
-
-  horario: string | null;
-  setHorario: (h: string | null) => void;
-
+  
   resetFlow: () => void;
+  isComplete: () => boolean;
 }
 
 const AgendarCitaContext = createContext<AgendarCitaContextType | null>(null);
@@ -54,89 +53,107 @@ export const useAgendarCita = () => {
   return context;
 };
 
-export function AgendarCitaProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [service, setService] = useState<ServiceType>(null);
+export function AgendarCitaProvider({ children }: { children: React.ReactNode }) {
+  const [selectedService, setSelectedService] = useState<Servicio | null>(null);
+  const [selectedVeterinario, setSelectedVeterinario] = useState<Veterinario | null>(null);
+  const [selectedFecha, setSelectedFecha] = useState<string | null>(null);
+  const [selectedHorario, setSelectedHorario] = useState<string | null>(null);
+  const [selectedMascota, setSelectedMascota] = useState<Mascota | null>(null);
   const [motivo, setMotivo] = useState("");
-  const [groomingOption, setGroomingOption] = useState("");
+  
   const [email, setEmail] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [especie, setEspecie] = useState<"perro" | "gato" | null>(null);
+  
+  const [especie, setEspecie] = useState("");
   const [nombreMascota, setNombreMascota] = useState("");
   const [raza, setRaza] = useState("");
-  const [fecha, setFecha] = useState<string | null>(null);
-  const [horario, setHorario] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("agendarCitaFlow");
     if (saved) {
-      const data = JSON.parse(saved);
-      setService(data.service || null);
-      setMotivo(data.motivo || "");
-      setGroomingOption(data.groomingOption || "");
-      setEmail(data.email || "");
-      setNombre(data.nombre || "");
-      setApellido(data.apellido || "");
-      setTelefono(data.telefono || "");
-      setEspecie(data.especie || null);
-      setNombreMascota(data.nombreMascota || "");
-      setRaza(data.raza || "");
-      setFecha(data.fecha || null);
-      setHorario(data.horario || null);
+      try {
+        const data = JSON.parse(saved);
+        if (data.selectedService) setSelectedService(data.selectedService);
+        if (data.selectedVeterinario) setSelectedVeterinario(data.selectedVeterinario);
+        if (data.selectedFecha) setSelectedFecha(data.selectedFecha);
+        if (data.selectedHorario) setSelectedHorario(data.selectedHorario);
+        if (data.selectedMascota) setSelectedMascota(data.selectedMascota);
+        if (data.motivo) setMotivo(data.motivo);
+        if (data.email) setEmail(data.email);
+        if (data.nombre) setNombre(data.nombre);
+        if (data.apellido) setApellido(data.apellido);
+        if (data.telefono) setTelefono(data.telefono);
+        if (data.especie) setEspecie(data.especie);
+        if (data.nombreMascota) setNombreMascota(data.nombreMascota);
+        if (data.raza) setRaza(data.raza);
+      } catch (error) {
+        console.error('Error loading saved flow:', error);
+      }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(
-      "agendarCitaFlow",
-      JSON.stringify({
-        service,
-        motivo,
-        groomingOption,
-        email,
-        nombre,
-        apellido,
-        telefono,
-        especie,
-        nombreMascota,
-        raza,
-        fecha,
-        horario,
-      })
-    );
-  }, [
-    service,
-    motivo,
-    groomingOption,
-    email,
-    nombre,
-    apellido,
-    telefono,
-    especie,
-    nombreMascota,
-    raza,
-    fecha,
-    horario,
-  ]);
+    localStorage.setItem("agendarCitaFlow", JSON.stringify({
+      selectedService,
+      selectedVeterinario,
+      selectedFecha,
+      selectedHorario,
+      selectedMascota,
+      motivo,
+      email,
+      nombre,
+      apellido,
+      telefono,
+      especie,
+      nombreMascota,
+      raza,
+    }));
+  }, [selectedService, selectedVeterinario, selectedFecha, selectedHorario, selectedMascota, motivo, email, nombre, apellido, telefono, especie, nombreMascota, raza]);
 
   const resetFlow = () => {
+    setSelectedService(null);
+    setSelectedVeterinario(null);
+    setSelectedFecha(null);
+    setSelectedHorario(null);
+    setSelectedMascota(null);
+    setMotivo("");
+    setEmail("");
+    setNombre("");
+    setApellido("");
+    setTelefono("");
+    setEspecie("");
+    setNombreMascota("");
+    setRaza("");
     localStorage.removeItem("agendarCitaFlow");
+  };
+
+  const isComplete = () => {
+    return !!(
+      selectedService &&
+      selectedVeterinario &&
+      selectedFecha &&
+      selectedHorario &&
+      (selectedMascota || nombreMascota)
+    );
   };
 
   return (
     <AgendarCitaContext.Provider
       value={{
-        service,
-        setService,
+        selectedService,
+        setSelectedService,
+        selectedVeterinario,
+        setSelectedVeterinario,
+        selectedFecha,
+        setSelectedFecha,
+        selectedHorario,
+        setSelectedHorario,
+        selectedMascota,
+        setSelectedMascota,
         motivo,
         setMotivo,
-        groomingOption,
-        setGroomingOption,
         email,
         setEmail,
         nombre,
@@ -151,11 +168,8 @@ export function AgendarCitaProvider({
         setNombreMascota,
         raza,
         setRaza,
-        fecha,
-        setFecha,
-        horario,
-        setHorario,
         resetFlow,
+        isComplete,
       }}
     >
       {children}
