@@ -3,6 +3,7 @@ import { CitaUI } from "../model/ui.model";
 
 interface CitaRowProps {
   cita: CitaUI;
+  onVer: () => void;
 }
 
 function PetIcon({ species }: { species: CitaUI["species"] }) {
@@ -74,7 +75,7 @@ function EstadoBadge({ estado }: { estado: CitaUI["estado"] }) {
   );
 }
 
-export default function CitaRow({ cita }: CitaRowProps) {
+export default function CitaRow({ cita, onVer }: CitaRowProps) {
   return (
     <tr
       style={{ borderBottom: "1px solid #F3F4F6" }}
@@ -128,6 +129,7 @@ export default function CitaRow({ cita }: CitaRowProps) {
           {/* Ver */}
           <button
             title="Ver detalle"
+            onClick={onVer}
             style={{
               width: "32px",
               height: "32px",
@@ -147,27 +149,7 @@ export default function CitaRow({ cita }: CitaRowProps) {
             </svg>
           </button>
 
-          {/* Editar */}
-          <button
-            title="Editar cita"
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "8px",
-              border: "1px solid #E5E7EB",
-              backgroundColor: "#FFFFFF",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "#6B7280",
-            }}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-            </svg>
-          </button>
+
         </div>
       </td>
     </tr>

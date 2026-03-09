@@ -5,11 +5,12 @@ import ClienteRow from "./ClienteRow";
 interface ClientesTableProps {
   clientes: ClienteUI[];
   total?: number;
+  onVerCliente: (cliente: ClienteUI) => void;
 }
 
 const COLUMNS = ["Cliente", "Teléfono / Correo", "Mascotas asociadas", "Estado", "Acciones"];
 
-export default function ClientesTable({ clientes, total = 128 }: ClientesTableProps) {
+export default function ClientesTable({ clientes, total = 128, onVerCliente }: ClientesTableProps) {
   return (
     <div
       style={{
@@ -58,7 +59,7 @@ export default function ClientesTable({ clientes, total = 128 }: ClientesTablePr
               </tr>
             ) : (
               clientes.map((cliente) => (
-                <ClienteRow key={cliente.id} cliente={cliente} />
+                <ClienteRow key={cliente.id} cliente={cliente} onVer={() => onVerCliente(cliente)} />
               ))
             )}
           </tbody>

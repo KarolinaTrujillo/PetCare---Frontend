@@ -3,7 +3,9 @@ import { ClienteUI } from "../model/ui.model";
 
 interface ClienteRowProps {
   cliente: ClienteUI;
+  onVer: () => void;
 }
+
 
 function StatusBadge({ estado }: { estado: ClienteUI["estado"] }) {
   const isActive = estado === "Activo";
@@ -34,7 +36,7 @@ function StatusBadge({ estado }: { estado: ClienteUI["estado"] }) {
   );
 }
 
-export default function ClienteRow({ cliente }: ClienteRowProps) {
+export default function ClienteRow({ cliente, onVer }: ClienteRowProps) {
   return (
     <tr
       style={{ borderBottom: "1px solid #F3F4F6" }}
@@ -75,6 +77,7 @@ export default function ClienteRow({ cliente }: ClienteRowProps) {
           {/* Ver */}
           <button
             title="Ver detalle"
+            onClick={onVer}
             style={{
               width: "32px",
               height: "32px",
@@ -91,28 +94,6 @@ export default function ClienteRow({ cliente }: ClienteRowProps) {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
               <circle cx="12" cy="12" r="3" />
-            </svg>
-          </button>
-
-          {/* Editar */}
-          <button
-            title="Editar cliente"
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "8px",
-              border: "1px solid #E5E7EB",
-              backgroundColor: "#FFFFFF",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "#6B7280",
-            }}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
           </button>
         </div>

@@ -5,11 +5,12 @@ import VeterinarioRow from "./PersonalRow";
 interface VeterinariosTableProps {
   veterinarios: VeterinarioUI[];
   total?: number;
+  onEditarVeterinario: (veterinario: VeterinarioUI) => void;
 }
 
 const COLUMNS = ["VETERINARIO", "CONTACTO", "CÉDULA / ID", "ESTADO", "ACCIONES"];
 
-export default function VeterinariosTable({ veterinarios, total = 128 }: VeterinariosTableProps) {
+export default function VeterinariosTable({ veterinarios, total = 128, onEditarVeterinario }: VeterinariosTableProps) {
   return (
     <div
       style={{
@@ -52,7 +53,7 @@ export default function VeterinariosTable({ veterinarios, total = 128 }: Veterin
                 </td>
               </tr>
             ) : (
-              veterinarios.map((v) => <VeterinarioRow key={v.id} veterinario={v} />)
+              veterinarios.map((v) => <VeterinarioRow key={v.id} veterinario={v} onEditar={() => onEditarVeterinario(v)} />)
             )}
           </tbody>
         </table>

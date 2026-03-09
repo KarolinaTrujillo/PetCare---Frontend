@@ -5,11 +5,12 @@ import PacienteRow from "./PacienteRow";
 interface PacientesTableProps {
   pacientes: PacienteUI[];
   total?: number;
+  onVerPaciente: (paciente: PacienteUI) => void;
 }
 
 const COLUMNS = ["MASCOTA", "ESPECIE / RAZA", "PROPIETARIO", "ESTADO", "ACCIONES"];
 
-export default function PacientesTable({ pacientes, total = 128 }: PacientesTableProps) {
+export default function PacientesTable({ pacientes, total = 128, onVerPaciente }: PacientesTableProps) {
   return (
     <div
       style={{
@@ -54,7 +55,7 @@ export default function PacientesTable({ pacientes, total = 128 }: PacientesTabl
                 </td>
               </tr>
             ) : (
-              pacientes.map((p) => <PacienteRow key={p.id} paciente={p} />)
+              pacientes.map((p) => <PacienteRow key={p.id} paciente={p} onVer={() => onVerPaciente(p)} />)
             )}
           </tbody>
         </table>

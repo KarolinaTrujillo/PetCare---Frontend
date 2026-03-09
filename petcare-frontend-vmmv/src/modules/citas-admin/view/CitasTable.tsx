@@ -5,11 +5,12 @@ import CitaRow from "./CitaRow";
 interface CitasTableProps {
   citas: CitaUI[];
   total?: number;
+  onVerCita: (cita: CitaUI) => void;
 }
 
 const COLUMNS = ["Paciente", "Propietario", "Servicio", "Fecha / Hora", "Estado", "Acciones"];
 
-export default function CitasTable({ citas, total = 128 }: CitasTableProps) {
+export default function CitasTable({ citas, total = 128, onVerCita }: CitasTableProps) {
   return (
     <div
       style={{
@@ -54,7 +55,7 @@ export default function CitasTable({ citas, total = 128 }: CitasTableProps) {
                 </td>
               </tr>
             ) : (
-              citas.map((cita) => <CitaRow key={cita.id} cita={cita} />)
+              citas.map((cita) => <CitaRow key={cita.id} cita={cita} onVer={() => onVerCita(cita)} />)
             )}
           </tbody>
         </table>

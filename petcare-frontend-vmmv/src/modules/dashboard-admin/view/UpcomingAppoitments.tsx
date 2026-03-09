@@ -1,5 +1,21 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { AppointmentUI } from "../model/ui.model";
+import CitaDetailModal, { CitaDetailData } from "@/modules/citas-admin/view/CitaDetailModal";
+
+const especieMap: Record<string, string> = { dog: "Perro", cat: "Gato", bird: "Ave", other: "Otro" };
+
+function mapAptToDetail(apt: AppointmentUI): CitaDetailData {
+  return {
+    nombre: apt.patientName,
+    raza: apt.patientBreed,
+    especie: especieMap[apt.patientSpecies] ?? apt.patientSpecies,
+    propietario: apt.ownerName,
+    servicio: apt.badgeLabel,
+    hora: apt.time,
+  };
+}
 
 interface Props {
   appointments: AppointmentUI[];
@@ -69,6 +85,7 @@ function PetIcon({ species }: { species: AppointmentUI["patientSpecies"] }) {
 }
 
 export default function UpcomingAppointments({ appointments }: Props) {
+  const [selected, setSelected] = useState<AppointmentUI | null>(null);
   return (
     <div
       style={{
@@ -152,6 +169,7 @@ export default function UpcomingAppointments({ appointments }: Props) {
 
           {/* Action */}
           <button
+            onClick={() => setSelected(apt)}
             style={{
               backgroundColor: "#4F8A7C",
               color: "#FFFFFF",
@@ -168,6 +186,13 @@ export default function UpcomingAppointments({ appointments }: Props) {
           </button>
         </div>
       ))}
+
+      {selected && (
+        <CitaDetailModal
+          data={mapAptToDetail(selected)}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </div>
   );
 }

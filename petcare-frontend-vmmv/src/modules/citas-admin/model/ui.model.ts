@@ -5,7 +5,8 @@ export type ServicioUI =
   | "Limpieza dental"
   | "Control de peso"
   | "Vacunación"
-  | "Cirugía";
+  | "Cirugía"
+  | "Corte de pelo y baño";
 
 export interface CitaUI {
   id: string;

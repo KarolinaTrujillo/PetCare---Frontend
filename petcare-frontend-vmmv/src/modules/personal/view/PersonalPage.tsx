@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { usePersonalViewModel } from "@/modules/personal/viewmodel/usePersonalViewModel";
-import PersonalHeader from "./PersonalHeader";
+import { VeterinarioUI } from "../model/ui.model";
+import PersonalHeader, { FiltroRol } from "./PersonalHeader";
 import PersonalTable from "./PersonalTable";
 import PersonalFormModal from "./PersonalFormModal";
+import VeterinarioEditModal from "./VeterinarioEditModal";
 
 function Spinner() {
   return (
@@ -18,8 +20,18 @@ function Spinner() {
 export default function PersonalPage() {
   const { filteredVeterinarios, searchTerm, setSearchTerm, loading, isCreateOpen, openCreate, closeCreate } =
     usePersonalViewModel();
+  const [selectedVet, setSelectedVet] = useState<VeterinarioUI | null>(null);
+  const [filtroRol, setFiltroRol] = useState<FiltroRol>("todos");
 
   if (loading) return <Spinner />;
+
+  const personalFiltrado = filtroRol === "todos"
+    ? filteredVeterinarios
+    : filteredVeterinarios.filter((v) =>
+        filtroRol === "administradores"
+          ? v.especialidad === "Administrador"
+          : v.especialidad !== "Administrador"
+      );
 
   return (
     <div style={{ padding: "32px", minHeight: "100vh" }}>
@@ -27,9 +39,17 @@ export default function PersonalPage() {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         onNuevoClick={openCreate}
+        filtroRol={filtroRol}
+        onFiltroChange={setFiltroRol}
       />
-      <PersonalTable veterinarios={filteredVeterinarios} />
+      <PersonalTable veterinarios={personalFiltrado} onEditarVeterinario={setSelectedVet} />
       {isCreateOpen && <PersonalFormModal onClose={closeCreate} />}
+      {selectedVet && (
+        <VeterinarioEditModal
+          veterinario={selectedVet}
+          onClose={() => setSelectedVet(null)}
+        />
+      )}
     </div>
   );
 }

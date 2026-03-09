@@ -90,7 +90,7 @@ export default function RecentPatients({ patients }: Props) {
                 {patient.breed}
               </p>
             </div>
-            <span style={{ color: "#6B7280", fontSize: "16px" }}>›</span>
+
           </div>
         ))}
       </div>
