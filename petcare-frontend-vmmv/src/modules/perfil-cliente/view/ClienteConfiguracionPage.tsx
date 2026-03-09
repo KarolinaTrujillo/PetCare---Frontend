@@ -76,17 +76,20 @@ export function ClienteConfiguracionPage() {
   if (vm.loading) return <Spinner />;
 
   return (
-    <div style={{ padding: "32px", backgroundColor: C.bg, minHeight: "100vh" }}>
+    <div style={{ padding: "40px 24px", backgroundColor: C.bg, minHeight: "100vh", position: "relative" }}>
 
-      {/* Header */}
-      <div style={{ marginBottom: "24px" }}>
-        <h1 style={{ fontSize: "22px", fontWeight: 800, color: C.textMain, margin: 0 }}>
-          Configuración de Perfil
-        </h1>
-        <p style={{ fontSize: "13px", color: C.textSub, margin: "4px 0 0 0" }}>
-          Gestiona tu información personal y preferencias de cuenta.
-        </p>
-      </div>
+      {/* Centered container */}
+      <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+
+        {/* Header */}
+        <div style={{ marginBottom: "24px" }}>
+          <h1 style={{ fontSize: "22px", fontWeight: 800, color: C.textMain, margin: 0 }}>
+            Configuración de Perfil
+          </h1>
+          <p style={{ fontSize: "13px", color: C.textSub, margin: "4px 0 0 0" }}>
+            Gestiona tu información personal y preferencias de cuenta.
+          </p>
+        </div>
 
       {/* Card */}
       <div
@@ -94,7 +97,7 @@ export function ClienteConfiguracionPage() {
           backgroundColor: C.white,
           border: `1px solid ${C.border}`,
           borderRadius: "16px",
-          maxWidth: "700px",
+          width: "100%",
           overflow: "hidden",
         }}
       >
@@ -229,6 +232,18 @@ export function ClienteConfiguracionPage() {
           }}
         >
           <button
+            onClick={() => {}}
+            style={{
+              background: "none", border: "none",
+              fontSize: "14px", color: C.textSub,
+              fontWeight: 500, cursor: "pointer", padding: "10px 16px",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = C.textMain; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = C.textSub; }}
+          >
+            Cancelar
+          </button>
+          <button
             onClick={vm.guardarCambios}
             disabled={vm.saving}
             style={{
@@ -255,6 +270,7 @@ export function ClienteConfiguracionPage() {
         loading={vm.passwordLoading}
         error={vm.passwordError}
       />
+      </div>{/* end centered container */}
     </div>
   );
 }

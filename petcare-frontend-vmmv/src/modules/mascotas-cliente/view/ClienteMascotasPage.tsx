@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useClienteMascotasViewModel } from "@/modules/mascotas-cliente/viewmodel/useClienteMascotasViewModel";
 import MascotasHeader from "./MascotasHeader";
 import MascotaCard from "./MascotaCard";
+import AddMascotaCard from "./AddMascotaCard";
 
 function Spinner() {
   return (
@@ -14,7 +15,7 @@ function Spinner() {
 }
 
 export function ClienteMascotasPage() {
-  const { mascotas, loading } = useClienteMascotasViewModel();
+  const { mascotas, loading, handleVerMascota, handleEditarMascota, handleAgregarMascota } = useClienteMascotasViewModel();
 
   const [selectedMascota, setSelectedMascota] = useState<any>(null);
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
@@ -41,6 +42,7 @@ export function ClienteMascotasPage() {
             }}
           />
         ))}
+        <AddMascotaCard onClick={handleAgregarMascota} />
       </div>
 
       {/* MODAL */}

@@ -24,7 +24,7 @@ function Spinner() {
 }
 
 export default function MisPacientesPage() {
-  const { mascotas, filtradas, busqueda, setBusqueda, loading, userName } = useMascotasViewModel();
+  const { mascotas, filtradas, busqueda, setBusqueda, loading } = useMascotasViewModel();
 
   if (loading) return <Spinner />;
 
@@ -47,7 +47,7 @@ export default function MisPacientesPage() {
             Gestión integral de la base de datos clínica.
           </p>
         </div>
-        <MascotaForm busqueda={busqueda} onBusqueda={setBusqueda} userName={userName} />
+        <MascotaForm busqueda={busqueda} onBusqueda={setBusqueda} />
       </div>
 
       {/* Tabla */}

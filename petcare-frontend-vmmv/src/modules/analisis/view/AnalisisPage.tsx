@@ -25,9 +25,6 @@ export default function AnalisisPage() {
             Estadísticas y métricas generales del rendimiento de la clínica.
           </p>
         </div>
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "#1F2937", whiteSpace: "nowrap" }}>
-          Dr. Smith
-        </span>
       </div>
 
       {error && (

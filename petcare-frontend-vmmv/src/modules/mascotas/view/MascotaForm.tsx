@@ -6,10 +6,9 @@ import { Search, Filter, Plus } from "lucide-react";
 interface Props {
   busqueda: string;
   onBusqueda: (value: string) => void;
-  userName: string;
 }
 
-export default function MascotaForm({ busqueda, onBusqueda, userName }: Props) {
+export default function MascotaForm({ busqueda, onBusqueda }: Props) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <div style={{ position: "relative" }}>
@@ -73,11 +72,6 @@ export default function MascotaForm({ busqueda, onBusqueda, userName }: Props) {
         <Plus size={14} /> Nuevo paciente
       </button>
 
-      {/* Separator + User name */}
-      <div style={{ width: "1px", height: "24px", backgroundColor: "#E5E7EB" }} />
-      <span style={{ fontSize: "14px", fontWeight: 600, color: "#1F2937", whiteSpace: "nowrap" }}>
-        {userName}
-      </span>
     </div>
   );
 }

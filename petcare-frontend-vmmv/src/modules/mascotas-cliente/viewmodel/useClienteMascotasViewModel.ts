@@ -11,6 +11,7 @@ interface ClienteMascotasViewModelState {
   handleVerMascota: (id: string) => void;
   handleEditarMascota: (id: string) => void;
   handleAgregarMascota: () => void;
+  userName: string;
 }
 
 export function useClienteMascotasViewModel(): ClienteMascotasViewModelState {
@@ -39,5 +40,7 @@ export function useClienteMascotasViewModel(): ClienteMascotasViewModelState {
     console.log("[ViewModel] Agregar nueva mascota");
   };
 
-  return { mascotas, loading, handleVerMascota, handleEditarMascota, handleAgregarMascota };
+  const userName = "Juan Pérez";
+
+  return { mascotas, loading, handleVerMascota, handleEditarMascota, handleAgregarMascota, userName };
 }

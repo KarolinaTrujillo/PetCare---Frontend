@@ -3,10 +3,9 @@ import React from "react";
 interface CitasVetHeaderProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  userName: string;
 }
 
-export default function CitasVetHeader({ searchTerm, onSearchChange, userName }: CitasVetHeaderProps) {
+export default function CitasVetHeader({ searchTerm, onSearchChange }: CitasVetHeaderProps) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
       <div>
@@ -54,11 +53,6 @@ export default function CitasVetHeader({ searchTerm, onSearchChange, userName }:
           Filtrar
         </button>
 
-        {/* Separator + User name */}
-        <div style={{ width: "1px", height: "24px", backgroundColor: "#E5E7EB" }} />
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "#1F2937", whiteSpace: "nowrap" }}>
-          {userName}
-        </span>
       </div>
     </div>
   );

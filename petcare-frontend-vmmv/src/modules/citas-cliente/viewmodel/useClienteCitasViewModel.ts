@@ -8,6 +8,7 @@ import { CitaUI } from "../model/ui.model";
 interface ClienteCitasViewModelState {
   citas: CitaUI[];
   isLoading: boolean;
+  userName: string;
 }
 
 export function useClienteCitasViewModel(): ClienteCitasViewModelState {
@@ -24,5 +25,7 @@ export function useClienteCitasViewModel(): ClienteCitasViewModelState {
     fetchCitas();
   }, []);
 
-  return { citas, isLoading };
+  const userName = "Juan Pérez";
+
+  return { citas, isLoading, userName };
 }

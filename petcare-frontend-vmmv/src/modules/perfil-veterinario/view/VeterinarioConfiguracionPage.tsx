@@ -28,11 +28,6 @@ export default function VeterinarioConfiguracionPage() {
 
   return (
     <div style={{ padding: "40px 24px", minHeight: "100vh", backgroundColor: "#F9FAFB", boxSizing: "border-box" }}>
-      {/* User name top-right */}
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "32px" }}>
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "#1F2937" }}>Dr. Smith</span>
-      </div>
-
       {/* Centered content */}
       <div style={{ maxWidth: "720px", margin: "0 auto" }}>
         {/* Page title */}

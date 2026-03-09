@@ -15,13 +15,13 @@ function Spinner() {
 }
 
 export default function CitasVetPage() {
-  const { filteredCitas, searchTerm, setSearchTerm, loading, userName } = useCitasVetViewModel();
+  const { filteredCitas, searchTerm, setSearchTerm, loading } = useCitasVetViewModel();
 
   if (loading) return <Spinner />;
 
   return (
     <div style={{ padding: "32px", minHeight: "100vh" }}>
-      <CitasVetHeader searchTerm={searchTerm} onSearchChange={setSearchTerm} userName={userName} />
+      <CitasVetHeader searchTerm={searchTerm} onSearchChange={setSearchTerm} />
       <CitasVetTable citas={filteredCitas} />
     </div>
   );

@@ -31,9 +31,6 @@ export default function PerfilPage() {
             Gestiona tu información personal y preferencias de cuenta.
           </p>
         </div>
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "#1F2937", whiteSpace: "nowrap" }}>
-          Dr. Smith
-        </span>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center" }}>

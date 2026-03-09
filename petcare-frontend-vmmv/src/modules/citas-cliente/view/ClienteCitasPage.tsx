@@ -25,12 +25,12 @@ export function ClienteCitasPage() {
   if (isLoading) return <Spinner />;
 
   return (
-    <div style={{ backgroundColor: C.bg, minHeight: "100vh" }}>
-      <div className="p-8">
+    <div style={{ backgroundColor: C.bg, minHeight: "100vh", position: "relative" }}>
+      <div style={{ maxWidth: "760px", margin: "0 auto", padding: "40px 24px" }}>
 
         <CitasHeader />
 
-        <div className="max-w-[640px] flex flex-col gap-4">
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {citas.map((cita) => (
             <div
               key={cita.id}
