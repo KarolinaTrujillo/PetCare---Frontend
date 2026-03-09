@@ -9,71 +9,37 @@ const C = {
   border: "#E5E7EB",
 };
 
-function DogSVG() {
-  return (
-    <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
-      {/* ears */}
-      <path d="M28 40 Q20 18 34 22 Q42 26 36 42Z" fill="#A8D5CE" opacity="0.8" />
-      <path d="M72 40 Q80 18 66 22 Q58 26 64 42Z" fill="#A8D5CE" opacity="0.8" />
-      {/* head */}
-      <ellipse cx="50" cy="50" rx="26" ry="24" fill="#C8E8E4" />
-      {/* snout */}
-      <ellipse cx="50" cy="63" rx="13" ry="9" fill="#B2D9D4" />
-      {/* nose */}
-      <ellipse cx="50" cy="59" rx="5" ry="3.5" fill="#5BAA9C" />
-      {/* eyes */}
-      <circle cx="41" cy="48" r="4" fill="#5BAA9C" />
-      <circle cx="59" cy="48" r="4" fill="#5BAA9C" />
-      <circle cx="42.5" cy="47" r="1.5" fill="#fff" />
-      <circle cx="60.5" cy="47" r="1.5" fill="#fff" />
-      {/* mouth */}
-      <path d="M45 67 Q50 72 55 67" stroke="#5BAA9C" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      {/* body */}
-      <ellipse cx="50" cy="83" rx="17" ry="10" fill="#C8E8E4" />
+function PetIcon({ tipo }: { tipo: string }) {
+  const isCat = tipo === "gato";
+  return isCat ? (
+    <svg width="36" height="36" viewBox="0 0 64 64" fill="none" stroke="#4F8A7C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="32" cy="40" rx="16" ry="12" />
+      <circle cx="32" cy="22" r="10" />
+      <path d="M22 12 L18 4 L26 10" />
+      <path d="M42 12 L46 4 L38 10" />
+      <circle cx="28" cy="22" r="1.5" fill="#4F8A7C" stroke="none" />
+      <circle cx="36" cy="22" r="1.5" fill="#4F8A7C" stroke="none" />
+      <path d="M29 27 q3 2 6 0" />
     </svg>
-  );
-}
-
-function CatSVG() {
-  return (
-    <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
-      {/* ears */}
-      <polygon points="28,42 20,18 42,34" fill="#A8D5CE" opacity="0.8" />
-      <polygon points="72,42 80,18 58,34" fill="#A8D5CE" opacity="0.8" />
-      {/* head */}
-      <ellipse cx="50" cy="52" rx="25" ry="23" fill="#C8E8E4" />
-      {/* snout */}
-      <ellipse cx="50" cy="62" rx="10" ry="7" fill="#B2D9D4" />
-      {/* nose */}
-      <polygon points="50,57 47,62 53,62" fill="#5BAA9C" />
-      {/* eyes */}
-      <ellipse cx="41" cy="49" rx="4" ry="5" fill="#5BAA9C" />
-      <ellipse cx="59" cy="49" rx="4" ry="5" fill="#5BAA9C" />
-      <ellipse cx="41" cy="49" rx="1.5" ry="3" fill="#1F2937" />
-      <ellipse cx="59" cy="49" rx="1.5" ry="3" fill="#1F2937" />
-      <circle cx="42.5" cy="47.5" r="1" fill="#fff" />
-      <circle cx="60.5" cy="47.5" r="1" fill="#fff" />
-      {/* whiskers */}
-      <line x1="28" y1="61" x2="44" y2="63" stroke="#5BAA9C" strokeWidth="1" opacity="0.5" />
-      <line x1="28" y1="65" x2="44" y2="65" stroke="#5BAA9C" strokeWidth="1" opacity="0.5" />
-      <line x1="56" y1="63" x2="72" y2="61" stroke="#5BAA9C" strokeWidth="1" opacity="0.5" />
-      <line x1="56" y1="65" x2="72" y2="65" stroke="#5BAA9C" strokeWidth="1" opacity="0.5" />
-      {/* mouth */}
-      <path d="M46 67 Q50 71 54 67" stroke="#5BAA9C" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      {/* body */}
-      <ellipse cx="50" cy="83" rx="15" ry="9" fill="#C8E8E4" />
-      {/* accent dots */}
-      <circle cx="50" cy="16" r="1.5" fill="#5BAA9C" opacity="0.4" />
-      <circle cx="58" cy="19" r="1" fill="#5BAA9C" opacity="0.3" />
+  ) : (
+    <svg width="36" height="36" viewBox="0 0 64 64" fill="none" stroke="#4F8A7C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="32" cy="38" rx="18" ry="14" />
+      <circle cx="32" cy="20" r="10" />
+      <ellipse cx="20" cy="14" rx="5" ry="8" />
+      <ellipse cx="44" cy="14" rx="5" ry="8" />
+      <circle cx="28" cy="20" r="1.5" fill="#4F8A7C" stroke="none" />
+      <circle cx="36" cy="20" r="1.5" fill="#4F8A7C" stroke="none" />
+      <path d="M29 25 q3 3 6 0" />
     </svg>
   );
 }
 
 interface PetCardProps {
   pet: PetUI;
+  onVerMascota?: () => void;
 }
 
-export default function PetCard({ pet }: PetCardProps) {
+export default function PetCard({ pet, onVerMascota }: PetCardProps) {
   return (
     <div
       style={{
@@ -110,7 +76,7 @@ export default function PetCard({ pet }: PetCardProps) {
           display: "flex", alignItems: "center", justifyContent: "center",
         }}
       >
-        {pet.tipo === "perro" ? <DogSVG /> : <CatSVG />}
+        <PetIcon tipo={pet.tipo} />
       </div>
 
       {/* Name */}
@@ -118,6 +84,7 @@ export default function PetCard({ pet }: PetCardProps) {
 
       {/* CTA */}
       <button
+        onClick={onVerMascota}
         style={{
           width: "100%",
           backgroundColor: C.white,

@@ -10,69 +10,28 @@ const C = {
   border: "#E5E7EB",
 };
 
-// ─── Illustrations (lineal teal style matching the screenshot) ────────────────
-function DogIcon() {
-  return (
-    <svg width="72" height="72" viewBox="0 0 100 100" fill="none">
-      {/* ears */}
-      <path d="M27 42 Q18 18 32 22 Q42 27 36 44Z" fill="none" stroke="#4F8A7C" strokeWidth="2" strokeLinejoin="round" />
-      <path d="M73 42 Q82 18 68 22 Q58 27 64 44Z" fill="none" stroke="#4F8A7C" strokeWidth="2" strokeLinejoin="round" />
-      {/* head */}
-      <ellipse cx="50" cy="50" rx="26" ry="24" fill="none" stroke="#4F8A7C" strokeWidth="2" />
-      {/* snout */}
-      <ellipse cx="50" cy="63" rx="13" ry="9" fill="none" stroke="#4F8A7C" strokeWidth="2" />
-      {/* nose */}
-      <ellipse cx="50" cy="59" rx="4.5" ry="3" fill="#4F8A7C" />
-      {/* eyes */}
-      <circle cx="41" cy="48" r="3" fill="#4F8A7C" />
-      <circle cx="59" cy="48" r="3" fill="#4F8A7C" />
-      {/* mouth */}
-      <path d="M45 67 Q50 72 55 67" stroke="#4F8A7C" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      {/* body hint */}
-      <path d="M34 74 Q50 82 66 74" stroke="#4F8A7C" strokeWidth="2" strokeLinecap="round" fill="none" />
-      {/* accent dots */}
-      <circle cx="38" cy="26" r="1.5" fill="#4F8A7C" opacity="0.5" />
-      <circle cx="62" cy="24" r="1.5" fill="#4F8A7C" opacity="0.5" />
-    </svg>
-  );
-}
-
-function CatIcon() {
-  return (
-    <svg width="72" height="72" viewBox="0 0 100 100" fill="none">
-      {/* ears */}
-      <polygon points="28,42 20,16 44,34" fill="none" stroke="#4F8A7C" strokeWidth="2" strokeLinejoin="round" />
-      <polygon points="72,42 80,16 56,34" fill="none" stroke="#4F8A7C" strokeWidth="2" strokeLinejoin="round" />
-      {/* head */}
-      <ellipse cx="50" cy="52" rx="26" ry="24" fill="none" stroke="#4F8A7C" strokeWidth="2" />
-      {/* snout */}
-      <ellipse cx="50" cy="62" rx="10" ry="7" fill="none" stroke="#4F8A7C" strokeWidth="1.5" />
-      {/* nose */}
-      <polygon points="50,57 47,62 53,62" fill="#4F8A7C" />
-      {/* eyes */}
-      <ellipse cx="41" cy="49" rx="3.5" ry="4.5" fill="none" stroke="#4F8A7C" strokeWidth="2" />
-      <ellipse cx="59" cy="49" rx="3.5" ry="4.5" fill="none" stroke="#4F8A7C" strokeWidth="2" />
-      <ellipse cx="41" cy="49" rx="1.5" ry="3" fill="#4F8A7C" />
-      <ellipse cx="59" cy="49" rx="1.5" ry="3" fill="#4F8A7C" />
-      {/* whiskers */}
-      <line x1="28" y1="61" x2="42" y2="63" stroke="#4F8A7C" strokeWidth="1" opacity="0.6" />
-      <line x1="28" y1="65" x2="42" y2="65" stroke="#4F8A7C" strokeWidth="1" opacity="0.6" />
-      <line x1="58" y1="63" x2="72" y2="61" stroke="#4F8A7C" strokeWidth="1" opacity="0.6" />
-      <line x1="58" y1="65" x2="72" y2="65" stroke="#4F8A7C" strokeWidth="1" opacity="0.6" />
-      {/* mouth */}
-      <path d="M46 67 Q50 71 54 67" stroke="#4F8A7C" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      {/* body */}
-      <path d="M34 76 Q50 84 66 76" stroke="#4F8A7C" strokeWidth="2" strokeLinecap="round" fill="none" />
-      {/* tail */}
-      <path d="M66 76 Q82 65 76 54" stroke="#4F8A7C" strokeWidth="2" strokeLinecap="round" fill="none" />
-      {/* accent dot */}
-      <circle cx="62" cy="22" r="1.5" fill="#4F8A7C" opacity="0.5" />
-    </svg>
-  );
-}
-
 function PetIcon({ icon }: { icon: IconType }) {
-  return icon === "gato" ? <CatIcon /> : <DogIcon />;
+  return icon === "gato" ? (
+    <svg width="48" height="48" viewBox="0 0 64 64" fill="none" stroke="#4F8A7C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="32" cy="40" rx="16" ry="12" />
+      <circle cx="32" cy="22" r="10" />
+      <path d="M22 12 L18 4 L26 10" />
+      <path d="M42 12 L46 4 L38 10" />
+      <circle cx="28" cy="22" r="1.5" fill="#4F8A7C" stroke="none" />
+      <circle cx="36" cy="22" r="1.5" fill="#4F8A7C" stroke="none" />
+      <path d="M29 27 q3 2 6 0" />
+    </svg>
+  ) : (
+    <svg width="48" height="48" viewBox="0 0 64 64" fill="none" stroke="#4F8A7C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="32" cy="38" rx="18" ry="14" />
+      <circle cx="32" cy="20" r="10" />
+      <ellipse cx="20" cy="14" rx="5" ry="8" />
+      <ellipse cx="44" cy="14" rx="5" ry="8" />
+      <circle cx="28" cy="20" r="1.5" fill="#4F8A7C" stroke="none" />
+      <circle cx="36" cy="20" r="1.5" fill="#4F8A7C" stroke="none" />
+      <path d="M29 25 q3 3 6 0" />
+    </svg>
+  );
 }
 
 interface MascotaCardProps {
@@ -101,7 +60,13 @@ export default function MascotaCard({ mascota, onVer, onEditar }: MascotaCardPro
       }}
     >
       {/* Illustration */}
-      <div style={{ marginBottom: "4px" }}>
+      <div style={{
+        width: "96px", height: "96px",
+        borderRadius: "50%",
+        backgroundColor: C.greenLight,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        marginBottom: "4px",
+      }}>
         <PetIcon icon={mascota.icon} />
       </div>
 

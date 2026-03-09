@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useClienteMascotasViewModel } from "@/modules/mascotas-cliente/viewmodel/useClienteMascotasViewModel";
 import MascotasHeader from "./MascotasHeader";
 import MascotaCard from "./MascotaCard";
@@ -15,7 +16,8 @@ function Spinner() {
 }
 
 export function ClienteMascotasPage() {
-  const { mascotas, loading, handleVerMascota, handleEditarMascota, handleAgregarMascota } = useClienteMascotasViewModel();
+  const router = useRouter();
+  const { mascotas, loading, handleEditarMascota, handleAgregarMascota } = useClienteMascotasViewModel();
 
   const [selectedMascota, setSelectedMascota] = useState<any>(null);
   const [mode, setMode] = useState<"view" | "edit" | null>(null);
@@ -32,10 +34,7 @@ export function ClienteMascotasPage() {
           <MascotaCard
             key={mascota.id}
             mascota={mascota}
-            onVer={() => {
-              setSelectedMascota(mascota);
-              setMode("view");
-            }}
+            onVer={(id) => router.push(`/cliente/mismascotas/${id}`)}
             onEditar={() => {
               setSelectedMascota(mascota);
               setMode("edit");
