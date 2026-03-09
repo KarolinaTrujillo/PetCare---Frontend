@@ -23,6 +23,7 @@ export function mapAppointmentDTOtoUI(dto: AppointmentDTO): AppointmentUI {
     id: dto.id,
     patientName: dto.patientName,
     patientBreed: dto.patientBreed,
+    patientSpecies: dto.patientSpecies,
     ownerName: dto.ownerName,
     time: dto.time,
     badgeLabel: typeToLabel[dto.type],
