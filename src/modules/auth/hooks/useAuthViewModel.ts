@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginUseCase } from '@/use-cases/auth/login.use-case';
-import { registerUseCase } from '@/use-cases/auth/register.use-case';
-import { changePasswordUseCase } from '@/use-cases/auth/change-password.use-case';
-import { logoutUseCase } from '@/use-cases/auth/logout.use-case';
+import { loginUseCase } from '@/modules/auth/usecases/LoginUseCase';
+import { registerUseCase } from '@/modules/auth/usecases/RegisterUseCase';
+import { changePasswordUseCase } from '@/modules/auth/usecases/ChangePasswordUseCase';
+import { logoutUseCase } from '@/modules/auth/usecases/LogoutUseCase';
 import { LoginRequest, RegisterRequest, ChangePasswordRequest } from '@/modules/auth/interfaces/auth.interfaces';
 
 export const useAuthViewModel = () => {
@@ -52,16 +52,7 @@ export const useAuthViewModel = () => {
     }
   };
 
-  const logout = () => {
-    logoutUseCase();
-  };
+  const logout = () => logoutUseCase();
 
-  return {
-    isLoading,
-    error,
-    login,
-    register,
-    changePassword,
-    logout,
-  };
+  return { isLoading, error, login, register, changePassword, logout };
 };
