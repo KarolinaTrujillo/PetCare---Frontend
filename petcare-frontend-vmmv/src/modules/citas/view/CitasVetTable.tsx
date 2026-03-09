@@ -4,11 +4,13 @@ import CitasVetRow from "./CitasVetRow";
 
 interface CitasVetTableProps {
   citas: CitaVetUI[];
+  onVerCita: (cita: CitaVetUI) => void;
+  onEditarCita: (cita: CitaVetUI) => void;
 }
 
 const COLUMNS = ["PACIENTE", "PROPIETARIO", "SERVICIO", "FECHA", "ACCIÓN"];
 
-export default function CitasVetTable({ citas }: CitasVetTableProps) {
+export default function CitasVetTable({ citas, onVerCita, onEditarCita }: CitasVetTableProps) {
   return (
     <div
       style={{
@@ -47,7 +49,7 @@ export default function CitasVetTable({ citas }: CitasVetTableProps) {
                 </td>
               </tr>
             ) : (
-              citas.map((c) => <CitasVetRow key={c.id} cita={c} />)
+              citas.map((c) => <CitasVetRow key={c.id} cita={c} onVer={() => onVerCita(c)} onEditar={() => onEditarCita(c)} />)
             )}
           </tbody>
         </table>

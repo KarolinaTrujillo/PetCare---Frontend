@@ -1,10 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useVeterinarioDashboardViewModel } from "../viewmodel/useVeterinarioDashboardViewModel";
+import { VetAppointmentUI } from "../model/ui.model";
 import VetStatsCard from "./VetStatsCard";
 import VetUpcomingAppointments from "./VetUpcomingAppointments";
 import VetRecentPatients from "./VetRecentPatients";
+import CitaDetailModal, { CitaDetailData } from "@/modules/citas-admin/view/CitaDetailModal";
 
 function CalendarIcon() {
   return (
@@ -46,9 +49,23 @@ function Spinner() {
   );
 }
 
+function mapToDetail(cita: VetAppointmentUI): CitaDetailData {
+  const especieMap: Record<string, string> = { dog: "Perro", cat: "Gato", bird: "Ave", other: "Otro" };
+  return {
+    nombre: cita.patientName,
+    raza: cita.patientBreed,
+    especie: especieMap[cita.patientSpecies] ?? cita.patientSpecies,
+    propietario: cita.ownerName,
+    servicio: cita.service,
+    hora: cita.time,
+  };
+}
+
 export default function VeterinarioDashboardPage() {
   const { stats, upcomingAppointments, recentPatients, loading } =
     useVeterinarioDashboardViewModel();
+  const [selectedCita, setSelectedCita] = useState<VetAppointmentUI | null>(null);
+  const router = useRouter();
 
   if (loading) return <Spinner />;
 
@@ -82,9 +99,20 @@ export default function VeterinarioDashboardPage() {
 
       {/* Bottom section */}
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "20px" }}>
-        <VetUpcomingAppointments appointments={upcomingAppointments} />
+        <VetUpcomingAppointments
+          appointments={upcomingAppointments}
+          onDetalles={setSelectedCita}
+          onVerTodas={() => router.push("/veterinario/citas")}
+        />
         <VetRecentPatients patients={recentPatients} />
       </div>
+
+      {selectedCita && (
+        <CitaDetailModal
+          data={mapToDetail(selectedCita)}
+          onClose={() => setSelectedCita(null)}
+        />
+      )}
     </div>
   );
 }

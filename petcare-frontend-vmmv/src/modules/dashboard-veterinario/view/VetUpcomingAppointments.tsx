@@ -3,6 +3,8 @@ import { VetAppointmentUI } from "../model/ui.model";
 
 interface Props {
   appointments: VetAppointmentUI[];
+  onDetalles: (appointment: VetAppointmentUI) => void;
+  onVerTodas: () => void;
 }
 
 function PetIcon({ species }: { species: VetAppointmentUI["patientSpecies"] }) {
@@ -65,7 +67,7 @@ function Badge({ label, variant }: { label: string; variant: VetAppointmentUI["b
   );
 }
 
-export default function VetUpcomingAppointments({ appointments }: Props) {
+export default function VetUpcomingAppointments({ appointments, onDetalles, onVerTodas }: Props) {
   return (
     <div
       style={{
@@ -88,6 +90,7 @@ export default function VetUpcomingAppointments({ appointments }: Props) {
           Próximas citas
         </h3>
         <button
+          onClick={onVerTodas}
           style={{
             fontSize: "13px",
             color: "#4F8A7C",
@@ -152,6 +155,7 @@ export default function VetUpcomingAppointments({ appointments }: Props) {
           </div>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <button
+              onClick={() => onDetalles(cita)}
               style={{
                 backgroundColor: "#4F8A7C",
                 color: "#FFFFFF",

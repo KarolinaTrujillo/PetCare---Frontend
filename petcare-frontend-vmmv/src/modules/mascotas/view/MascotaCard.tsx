@@ -1,9 +1,9 @@
 import React from "react";
-import { Eye, Pencil } from "lucide-react";
 import { MascotaUI } from "../model/ui.model";
 
 interface Props {
   mascota: MascotaUI;
+  onVer: () => void;
 }
 
 function PetIcon({ especie }: { especie: string }) {
@@ -31,7 +31,7 @@ function PetIcon({ especie }: { especie: string }) {
   );
 }
 
-export default function MascotaCard({ mascota }: Props) {
+export default function MascotaCard({ mascota, onVer }: Props) {
   return (
     <div
       style={{
@@ -73,11 +73,16 @@ export default function MascotaCard({ mascota }: Props) {
         </span>
       </div>
       <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", color: "#9CA3AF" }}>
-        <button style={{ background: "none", border: "none", cursor: "pointer", color: "inherit" }}>
-          <Eye size={15} />
-        </button>
-        <button style={{ background: "none", border: "none", cursor: "pointer", color: "inherit" }}>
-          <Pencil size={15} />
+        <button
+          onClick={onVer}
+          style={{ background: "none", border: "none", cursor: "pointer", color: "inherit" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#4F8A7C"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"; }}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
         </button>
       </div>
     </div>

@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useMascotasViewModel } from "../viewmodel/useMascotasViewModel";
 import MascotasList from "./MascotasList";
-import MascotaForm from "./MascotaForm";
+import MascotaForm, { FiltroEspecieMascota } from "./MascotaForm";
+import MascotaHistorialModal from "./MascotaHistorialModal";
+import { MascotaUI } from "../model/ui.model";
 
 function Spinner() {
   return (
@@ -25,6 +27,16 @@ function Spinner() {
 
 export default function MisPacientesPage() {
   const { mascotas, filtradas, busqueda, setBusqueda, loading } = useMascotasViewModel();
+  const [filtroEspecie, setFiltroEspecie] = useState<FiltroEspecieMascota>("todos");
+  const [selectedMascota, setSelectedMascota] = useState<MascotaUI | null>(null);
+
+  const mascotasFiltradas = filtroEspecie === "todos"
+    ? filtradas
+    : filtradas.filter((m) =>
+        filtroEspecie === "gato"
+          ? m.especie.toLowerCase() === "gato"
+          : m.especie.toLowerCase() !== "gato"
+      );
 
   if (loading) return <Spinner />;
 
@@ -47,11 +59,20 @@ export default function MisPacientesPage() {
             Gestión integral de la base de datos clínica.
           </p>
         </div>
-        <MascotaForm busqueda={busqueda} onBusqueda={setBusqueda} />
+        <MascotaForm
+          busqueda={busqueda}
+          onBusqueda={setBusqueda}
+          filtroEspecie={filtroEspecie}
+          onFiltroChange={setFiltroEspecie}
+        />
       </div>
 
       {/* Tabla */}
-      <MascotasList mascotas={filtradas} total={mascotas.length} />
+      <MascotasList mascotas={mascotasFiltradas} total={mascotas.length} onVerMascota={setSelectedMascota} />
+
+      {selectedMascota && (
+        <MascotaHistorialModal mascota={selectedMascota} onClose={() => setSelectedMascota(null)} />
+      )}
     </div>
   );
 }

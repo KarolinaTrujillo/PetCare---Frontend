@@ -5,9 +5,10 @@ import MascotaCard from "./MascotaCard";
 interface Props {
   mascotas: MascotaUI[];
   total: number;
+  onVerMascota: (mascota: MascotaUI) => void;
 }
 
-export default function MascotasList({ mascotas, total }: Props) {
+export default function MascotasList({ mascotas, total, onVerMascota }: Props) {
   return (
     <div
       style={{
@@ -39,7 +40,7 @@ export default function MascotasList({ mascotas, total }: Props) {
       </div>
 
       {mascotas.map((m) => (
-        <MascotaCard key={m.id} mascota={m} />
+        <MascotaCard key={m.id} mascota={m} onVer={() => onVerMascota(m)} />
       ))}
 
       {/* Footer */}

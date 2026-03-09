@@ -1,9 +1,10 @@
 import React from "react";
-import { Eye, Pencil } from "lucide-react";
 import { CitaVetUI } from "../model/ui.model";
 
 interface CitasVetRowProps {
   cita: CitaVetUI;
+  onVer: () => void;
+  onEditar: () => void;
 }
 
 function PetIcon({ species }: { species: CitaVetUI["species"] }) {
@@ -31,7 +32,7 @@ function PetIcon({ species }: { species: CitaVetUI["species"] }) {
   );
 }
 
-export default function CitasVetRow({ cita }: CitasVetRowProps) {
+export default function CitasVetRow({ cita, onVer, onEditar }: CitasVetRowProps) {
   return (
     <tr
       style={{ borderBottom: "1px solid #F3F4F6" }}
@@ -71,11 +72,34 @@ export default function CitasVetRow({ cita }: CitasVetRowProps) {
         <p style={{ fontSize: "12px", color: "#6B7280" }}>{cita.hora}</p>
       </td>
 
-      {/* Acción */}
       <td style={{ padding: "16px 20px", textAlign: "right" }}>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", color: "#9CA3AF" }}>
-          <button style={{ background: "none", border: "none", cursor: "pointer", color: "inherit" }}><Eye size={15} /></button>
-          <button style={{ background: "none", border: "none", cursor: "pointer", color: "inherit" }}><Pencil size={15} /></button>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+          {/* Eye */}
+          <button
+            onClick={onVer}
+            title="Ver detalle"
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", width: "30px", height: "30px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#E6F4F1"; (e.currentTarget as HTMLButtonElement).style.color = "#4F8A7C"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"; }}
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
+          {/* Pencil */}
+          <button
+            onClick={onEditar}
+            title="Notas de consulta"
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", width: "30px", height: "30px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#E6F4F1"; (e.currentTarget as HTMLButtonElement).style.color = "#4F8A7C"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"; }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+          </button>
         </div>
       </td>
     </tr>

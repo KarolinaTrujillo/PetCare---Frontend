@@ -5,7 +5,8 @@ export type ServicioVetUI =
   | "Limpieza dental"
   | "Control de peso"
   | "Vacunación"
-  | "Cirugía";
+  | "Cirugía"
+  | "Corte de pelo y baño";
 
 export interface CitaVetUI {
   id: string;
