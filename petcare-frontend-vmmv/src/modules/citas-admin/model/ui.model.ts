@@ -11,6 +11,7 @@ export interface CitaUI {
   id: string;
   paciente: string;
   raza: string;
+  species: "dog" | "cat" | "bird" | "other";
   iniciales: string;
   propietario: string;
   servicio: ServicioUI;
