@@ -28,8 +28,8 @@ function Badge({ label, variant }: { label: string; variant: AppointmentUI["badg
   );
 }
 
-function PetIcon({ breed }: { breed: string }) {
-  const isDog = !breed.toLowerCase().includes("cat");
+function PetIcon({ species }: { species: AppointmentUI["patientSpecies"] }) {
+  const isDog = species !== "cat";
   return (
     <div
       style={{
@@ -40,11 +40,30 @@ function PetIcon({ breed }: { breed: string }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: "16px",
         flexShrink: 0,
       }}
     >
-      {isDog ? "🐕" : "🐈"}
+      {isDog ? (
+        <svg width="18" height="18" viewBox="0 0 64 64" fill="none" stroke="#4F8A7C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <ellipse cx="32" cy="38" rx="18" ry="14" />
+          <circle cx="32" cy="20" r="10" />
+          <ellipse cx="20" cy="14" rx="5" ry="8" />
+          <ellipse cx="44" cy="14" rx="5" ry="8" />
+          <circle cx="28" cy="20" r="1.5" fill="#4F8A7C" stroke="none" />
+          <circle cx="36" cy="20" r="1.5" fill="#4F8A7C" stroke="none" />
+          <path d="M29 25 q3 3 6 0" />
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 64 64" fill="none" stroke="#4F8A7C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <ellipse cx="32" cy="40" rx="16" ry="12" />
+          <circle cx="32" cy="22" r="10" />
+          <path d="M22 12 L18 4 L26 10" />
+          <path d="M42 12 L46 4 L38 10" />
+          <circle cx="28" cy="22" r="1.5" fill="#4F8A7C" stroke="none" />
+          <circle cx="36" cy="22" r="1.5" fill="#4F8A7C" stroke="none" />
+          <path d="M29 27 q3 2 6 0" />
+        </svg>
+      )}
     </div>
   );
 }
@@ -111,7 +130,7 @@ export default function UpcomingAppointments({ appointments }: Props) {
         >
           {/* Patient */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <PetIcon breed={apt.patientBreed} />
+            <PetIcon species={apt.patientSpecies} />
             <div>
               <p style={{ fontSize: "14px", fontWeight: 600, color: "#1F2937", marginBottom: "2px" }}>
                 {apt.patientName}
@@ -145,7 +164,7 @@ export default function UpcomingAppointments({ appointments }: Props) {
               width: "fit-content",
             }}
           >
-            Details
+            Detalles
           </button>
         </div>
       ))}
