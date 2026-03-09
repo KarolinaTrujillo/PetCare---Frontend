@@ -25,6 +25,7 @@ export interface AuthUser {
   apellido: string;
   email: string;
   role: string;
+  rol?: string;
 }
 
 export interface LoginResponse {
@@ -34,10 +35,11 @@ export interface LoginResponse {
 
 export interface RegisterResponse {
   message: string;
+  success: boolean;
   user: AuthUser;
 }
 
-// Result interfaces (lo que devuelven los use-cases)
+// Result interfaces
 export interface LoginResult {
   user: AuthUser;
   token: string;

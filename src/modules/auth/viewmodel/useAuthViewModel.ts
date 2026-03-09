@@ -14,111 +14,93 @@ export function useAuthViewModel() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // ─── Login ───────────────────────────────────────────
-
   const login = async (credentials: LoginRequestDTO) => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const { user, token } = await AuthService.login(credentials);
+      const response = await AuthService.login(credentials);
+      const { user, token } = response.data;
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
       const redirectPath = getRedirectByRole(user.role);
       router.push(redirectPath);
-
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Credenciales incorrectas';
       setError(errorMessage);
-      console.error('Login error:', err);
     } finally {
       setIsLoading(false);
     }
   };
-
-  // ─── Register ────────────────────────────────────────
 
   const register = async (data: RegisterRequestDTO) => {
     setIsLoading(true);
     setError(null);
-
     try {
       const response = await AuthService.register(data);
+      const result = response.data;
 
-      if (response.success) {
+      if (result.success) {
         router.push('/login');
-        return { success: true, message: response.message };
+        return { success: true, message: result.message };
       } else {
-        setError(response.message || 'Error al registrarse');
-        return { success: false, message: response.message };
+        setError(result.message || 'Error al registrarse');
+        return { success: false, message: result.message };
       }
-
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Error al registrarse';
       setError(errorMessage);
-      console.error('Register error:', err);
       return { success: false, message: errorMessage };
     } finally {
       setIsLoading(false);
     }
   };
-
-  // ─── Forgot Password ─────────────────────────────────
 
   const forgotPassword = async (data: ForgotPasswordRequestDTO) => {
     setIsLoading(true);
     setError(null);
-
     try {
       const response = await AuthService.forgotPassword(data);
+      const result = response.data;
 
-      if (response.success) {
-        return { success: true, message: response.message };
+      if (result.success) {
+        return { success: true, message: result.message };
       } else {
-        setError(response.message || 'Error al enviar email');
-        return { success: false, message: response.message };
+        setError(result.message || 'Error al enviar email');
+        return { success: false, message: result.message };
       }
-
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Error al enviar email de recuperación';
       setError(errorMessage);
-      console.error('Forgot password error:', err);
       return { success: false, message: errorMessage };
     } finally {
       setIsLoading(false);
     }
   };
-
-  // ─── Reset Password ──────────────────────────────────
 
   const resetPassword = async (data: ResetPasswordRequestDTO) => {
     setIsLoading(true);
     setError(null);
-
     try {
       const response = await AuthService.resetPassword(data);
+      const result = response.data;
 
-      if (response.success) {
+      if (result.success) {
         router.push('/login');
-        return { success: true, message: response.message };
+        return { success: true, message: result.message };
       } else {
-        setError(response.message || 'Error al cambiar contraseña');
-        return { success: false, message: response.message };
+        setError(result.message || 'Error al cambiar contraseña');
+        return { success: false, message: result.message };
       }
-
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Error al cambiar contraseña';
       setError(errorMessage);
-      console.error('Reset password error:', err);
       return { success: false, message: errorMessage };
     } finally {
       setIsLoading(false);
     }
   };
-
-  // ─── Logout ──────────────────────────────────────────
 
   const logout = async () => {
     try {

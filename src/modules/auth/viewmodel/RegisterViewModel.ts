@@ -46,15 +46,17 @@ export const useRegisterViewModel = (fromAppointment: boolean) => {
         password: data.password
       });
 
+      const { token, user } = loginResponse.data;
+
       if (typeof window !== 'undefined') {
-        localStorage.setItem('token', loginResponse.token);
-        localStorage.setItem('user', JSON.stringify(loginResponse.user));
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
       }
       
       if (fromAppointment) {
-        await createPendingAppointment(loginResponse.user.id, loginResponse.token);
+        await createPendingAppointment(user.id, token);
       } else {
-        redirectToDashboard(loginResponse.user.role);
+        redirectToDashboard(user.role);
       }
 
     } catch (err: any) {
@@ -141,7 +143,6 @@ export const useRegisterViewModel = (fromAppointment: boolean) => {
     appointmentData: AppointmentData,
     token: string
   ) => {
-    // Crear fecha ISO completa
     const fechaHora = `${appointmentData.fecha}T${appointmentData.horario}:00.000Z`;
     
     const citaData = {
@@ -149,7 +150,7 @@ export const useRegisterViewModel = (fromAppointment: boolean) => {
       id_mascota: mascotaId,
       id_veterinario: appointmentData.veterinario?.id_personal || 4,
       id_servicio: appointmentData.servicio?.id_servicio || 1,
-      fecha_hora: fechaHora, // String ISO
+      fecha_hora: fechaHora,
       motivo_detalle: appointmentData.motivo || 'Consulta general'
     };
 
