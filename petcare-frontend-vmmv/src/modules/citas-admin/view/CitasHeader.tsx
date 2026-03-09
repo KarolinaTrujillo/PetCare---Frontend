@@ -11,7 +11,7 @@ export default function CitasHeader({ searchTerm, onSearchChange }: CitasHeaderP
       style={{
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "flex-start",
+        alignItems: "center",
         marginBottom: "24px",
         flexWrap: "wrap",
         gap: "16px",
@@ -114,6 +114,14 @@ export default function CitasHeader({ searchTerm, onSearchChange }: CitasHeaderP
           </svg>
           Nueva Cita
         </button>
+
+        {/* Divider */}
+        <div style={{ width: "1px", height: "28px", backgroundColor: "#E5E7EB", marginLeft: "8px" }} />
+
+        {/* Admin name */}
+        <span style={{ fontSize: "14px", fontWeight: 600, color: "#1F2937", marginLeft: "8px", whiteSpace: "nowrap" }}>
+          Dr. Smith
+        </span>
       </div>
     </div>
   );

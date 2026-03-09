@@ -34,6 +34,7 @@ export function mapCitaDTOtoUI(dto: CitaDTO): CitaUI {
     id: dto.id,
     paciente: dto.paciente,
     raza: dto.raza,
+    species: dto.species,
     iniciales: getIniciales(dto.paciente),
     propietario: dto.propietario,
     servicio: servicioLabelMap[dto.servicio],

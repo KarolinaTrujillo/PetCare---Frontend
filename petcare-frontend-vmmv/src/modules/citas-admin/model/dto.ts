@@ -11,6 +11,7 @@ export interface CitaDTO {
   id: string;
   paciente: string;
   raza: string;
+  species: "dog" | "cat" | "bird" | "other";
   propietario: string;
   servicio: ServicioDTO;
   fecha: string;
