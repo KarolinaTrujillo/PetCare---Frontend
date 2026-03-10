@@ -16,8 +16,8 @@ export class AuthMapper {
       email: dto.email,
       rolId,
       rol,
-      passwordTemporal: dto.password_temporal,
-      fotoPerfil: dto.foto_perfil,
+      passwordTemporal: dto.password_temporal ?? false,
+      fotoPerfil: dto.foto_perfil ?? null,
     };
   }
 
