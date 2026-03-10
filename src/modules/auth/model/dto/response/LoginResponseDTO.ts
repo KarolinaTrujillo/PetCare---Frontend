@@ -7,7 +7,7 @@ export interface LoginResponseDTO {
     nombre: string;
     apellido: string;
     rol: 'ADMIN' | 'VETERINARIO' | 'CLIENTE';
-    password_temporal: boolean;
-    foto_perfil: string | null;
+    password_temporal?: boolean;
+    foto_perfil?: string | null;
   };
 }
