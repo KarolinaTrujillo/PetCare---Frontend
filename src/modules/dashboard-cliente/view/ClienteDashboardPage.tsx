@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import PetCard from "./PetCard";
 import AppointmentCard from "./AppointmentCard";
+import AgregarMascotaModal from "@/modules/mascotas-cliente/view/AgregarMascotaModal";
 import { PetUI, AppointmentUI } from "../model/ui.model";
 
 const C = {
@@ -29,17 +30,9 @@ const mockCitas: AppointmentUI[] = [
 export default function ClienteDashboardPage() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-  const [nombre, setNombre] = useState("");
-  const [especie, setEspecie] = useState("Perro");
-  const [raza, setRaza] = useState("");
-
-  const handleGuardar = () => {
-    if (!nombre.trim()) return;
-    setShowModal(false);
-    setNombre("");
-    setRaza("");
-    setEspecie("Perro");
-  };
+  const [nombreMascota, setNombreMascota] = useState("");
+  const [razaMascota, setRazaMascota] = useState("");
+  const [specieSeleccionada, setSpecieSeleccionada] = useState<"perro" | "gato">("perro");
 
   return (
     <div style={{ backgroundColor: C.bg, minHeight: "100vh", padding: "32px" }}>
@@ -120,65 +113,28 @@ export default function ClienteDashboardPage() {
       </div>
 
       {/* MODAL — Agregar mascota */}
-      {showModal && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}
-          onClick={() => setShowModal(false)}>
-          <div style={{ backgroundColor: C.white, width: "420px", borderRadius: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)", padding: "32px", position: "relative" }}
-            onClick={(e) => e.stopPropagation()}>
-
-            <h2 style={{ fontSize: "18px", fontWeight: 700, color: C.textMain, marginBottom: "24px" }}>Agregar mascota</h2>
-
-            <div style={{ marginBottom: "16px" }}>
-              <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: C.textMain, marginBottom: "6px" }}>Nombre</label>
-              <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                placeholder="Ej. Firulais"
-                style={{ width: "100%", border: `1px solid ${C.border}`, borderRadius: "8px", padding: "8px 12px", fontSize: "13px", outline: "none", boxSizing: "border-box" }}
-              />
-            </div>
-
-            <div style={{ marginBottom: "16px" }}>
-              <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: C.textMain, marginBottom: "6px" }}>Especie</label>
-              <select
-                value={especie}
-                onChange={(e) => setEspecie(e.target.value)}
-                style={{ width: "100%", border: `1px solid ${C.border}`, borderRadius: "8px", padding: "8px 12px", fontSize: "13px", outline: "none" }}
-              >
-                <option>Perro</option>
-                <option>Gato</option>
-              </select>
-            </div>
-
-            <div style={{ marginBottom: "24px" }}>
-              <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: C.textMain, marginBottom: "6px" }}>Raza</label>
-              <input
-                type="text"
-                value={raza}
-                onChange={(e) => setRaza(e.target.value)}
-                placeholder="Ej. Golden Retriever"
-                style={{ width: "100%", border: `1px solid ${C.border}`, borderRadius: "8px", padding: "8px 12px", fontSize: "13px", outline: "none", boxSizing: "border-box" }}
-              />
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-              <button
-                onClick={() => setShowModal(false)}
-                style={{ padding: "9px 20px", borderRadius: "8px", border: `1px solid ${C.border}`, backgroundColor: C.white, fontSize: "13px", cursor: "pointer" }}
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleGuardar}
-                style={{ padding: "9px 20px", borderRadius: "8px", border: "none", backgroundColor: C.green, color: C.white, fontSize: "13px", fontWeight: 600, cursor: "pointer" }}
-              >
-                Guardar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AgregarMascotaModal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setNombreMascota("");
+          setRazaMascota("");
+          setSpecieSeleccionada("perro");
+        }}
+        onAgregar={() => {
+          if (!nombreMascota.trim()) return;
+          setShowModal(false);
+          setNombreMascota("");
+          setRazaMascota("");
+          setSpecieSeleccionada("perro");
+        }}
+        nombreMascota={nombreMascota}
+        setNombreMascota={setNombreMascota}
+        razaMascota={razaMascota}
+        setRazaMascota={setRazaMascota}
+        specieSeleccionada={specieSeleccionada}
+        setSpecieSeleccionada={setSpecieSeleccionada}
+      />
     </div>
   );
 }

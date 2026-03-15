@@ -13,5 +13,7 @@ export function mapMascotaDTOtoUI(dto: MascotaDTO): MascotaUI {
     id:     dto.id,
     nombre: dto.nombre,
     icon:   iconMap[dto.especie],
+    especie: dto.especie,
+    edad:   dto.edad,
   };
 }

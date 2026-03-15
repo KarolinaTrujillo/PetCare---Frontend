@@ -2,9 +2,9 @@
 
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaw } from "@fortawesome/free-solid-svg-icons";
+import { faPaw, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export interface NavItem {
   label: string;
@@ -18,6 +18,7 @@ interface SidebarProps {
 
 export default function Sidebar({ navItems }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const linkClass = (path: string) =>
     `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition ${
@@ -25,6 +26,11 @@ export default function Sidebar({ navItems }: SidebarProps) {
         ? ""
         : "text-gray-600 hover:bg-gray-100"
     }`;
+
+  const handleLogout = () => {
+    // Aquí irá la lógica de logout (borrar tokens, etc.)
+    router.push("/login");
+  };
 
   return (
     <aside className="w-64 bg-white border-r border-gray-100 min-h-screen p-6 flex flex-col">
@@ -59,6 +65,19 @@ export default function Sidebar({ navItems }: SidebarProps) {
           </Link>
         ))}
       </nav>
+
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-red-50 transition w-full"
+        style={{
+          border: "none",
+          backgroundColor: "transparent",
+          cursor: "pointer",
+        }}
+      >
+        <FontAwesomeIcon icon={faSignOutAlt} className="w-5 h-5 flex-shrink-0" />
+        <span>Cerrar sesión</span>
+      </button>
     </aside>
   );
 }

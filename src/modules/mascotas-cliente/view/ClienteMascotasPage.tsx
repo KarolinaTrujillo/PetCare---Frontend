@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useClienteMascotasViewModel } from "@/modules/mascotas-cliente/viewmodel/useClienteMascotasViewModel";
 import MascotasHeader from "./MascotasHeader";
 import MascotaCard from "./MascotaCard";
 import AddMascotaCard from "./AddMascotaCard";
+import AgregarMascotaModal from "./AgregarMascotaModal";
+import EditarMascotaModal from "./EditarMascotaModal";
 
 function Spinner() {
   return (
@@ -17,93 +19,49 @@ function Spinner() {
 
 export function ClienteMascotasPage() {
   const router = useRouter();
-  const { mascotas, loading, handleEditarMascota, handleAgregarMascota } = useClienteMascotasViewModel();
+  const vm = useClienteMascotasViewModel();
 
-  const [selectedMascota, setSelectedMascota] = useState<any>(null);
-  const [mode, setMode] = useState<"view" | "edit" | null>(null);
-
-  if (loading) return <Spinner />;
+  if (vm.loading) return <Spinner />;
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
-
       <MascotasHeader />
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6">
-        {mascotas.map((mascota) => (
+        {vm.mascotas.map((mascota) => (
           <MascotaCard
             key={mascota.id}
             mascota={mascota}
             onVer={(id) => router.push(`/cliente/mismascotas/${id}`)}
-            onEditar={() => {
-              setSelectedMascota(mascota);
-              setMode("edit");
-            }}
+            onEditar={() => vm.openEditModal(mascota)}
           />
         ))}
-        <AddMascotaCard onClick={handleAgregarMascota} />
+        <AddMascotaCard onClick={vm.openAddModal} />
       </div>
 
-      {/* MODAL */}
-      {selectedMascota && mode && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white w-[520px] rounded-2xl shadow-xl p-8 relative">
+      <EditarMascotaModal
+        isOpen={vm.selectedMascota !== null}
+        onClose={vm.closeEditModal}
+        onGuardar={vm.saveEditedMascota}
+        editNombre={vm.editNombre}
+        setEditNombre={vm.setEditNombre}
+        editRaza={vm.editRaza}
+        setEditRaza={vm.setEditRaza}
+        editEspecie={vm.editEspecie}
+        setEditEspecie={vm.setEditEspecie}
+      />
 
-            <button
-              onClick={() => {
-                setSelectedMascota(null);
-                setMode(null);
-              }}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
-            >
-              ✕
-            </button>
-
-            {mode === "view" && (
-              <>
-                <h2 className="text-lg font-bold mb-4">
-                  Perfil de mascota
-                </h2>
-
-                <div className="space-y-3 text-sm">
-                  <p><strong>Nombre:</strong> {selectedMascota.nombre}</p>
-                  <p><strong>Especie:</strong> {selectedMascota.especie}</p>
-                  <p><strong>Raza:</strong> {selectedMascota.raza}</p>
-                  <p><strong>Edad:</strong> {selectedMascota.edad}</p>
-                </div>
-              </>
-            )}
-
-            {mode === "edit" && (
-              <>
-                <h2 className="text-lg font-bold mb-4">
-                  Editar mascota
-                </h2>
-
-                <div className="space-y-4">
-                  <input
-                    defaultValue={selectedMascota.nombre}
-                    className="w-full border rounded-lg p-2 text-sm"
-                  />
-                  <input
-                    defaultValue={selectedMascota.raza}
-                    className="w-full border rounded-lg p-2 text-sm"
-                  />
-                  <input
-                    defaultValue={selectedMascota.edad}
-                    className="w-full border rounded-lg p-2 text-sm"
-                  />
-
-                  <button className="w-full bg-emerald-600 text-white py-2 rounded-lg text-sm font-semibold">
-                    Guardar cambios
-                  </button>
-                </div>
-              </>
-            )}
-
-          </div>
-        </div>
-      )}
+      <AgregarMascotaModal
+        isOpen={vm.showAddModal}
+        onClose={vm.closeAddModal}
+        onAgregar={vm.saveNewMascota}
+        nombreMascota={vm.nombreMascota}
+        setNombreMascota={vm.setNombreMascota}
+        razaMascota={vm.razaMascota}
+        setRazaMascota={vm.setRazaMascota}
+        specieSeleccionada={vm.specieSeleccionada}
+        setSpecieSeleccionada={vm.setSpecieSeleccionada}
+      />
     </div>
   );
 }
