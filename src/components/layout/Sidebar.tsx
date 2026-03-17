@@ -7,6 +7,12 @@ import { useEffect, useState } from "react";
 import { SidebarProps } from "../models/props/SidebarProps";
 import { UserInfo } from "../models/UserInfo";
 
+export type NavItem = {
+  label: string;
+  href: string;
+  icon: any;
+};
+
 export default function Sidebar({ navItems }: SidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
