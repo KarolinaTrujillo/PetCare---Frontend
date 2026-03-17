@@ -1,36 +1,37 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { clienteDashboardService } from "../services/clientedashboard.service";
-import { mapClienteDashboardDTOtoUI } from "../model/mapper";
-import { ClienteDashboardUI } from "../model/ui.model";
+import { useEffect, useState } from 'react';
+import { clienteDashboardService } from '../services/clientedashboard.service';
+import { GetCitaResponse } from '../model/dto/response/AppointmentResponseDTO';
 
-interface ClienteDashboardViewModelState {
-  data: ClienteDashboardUI | null;
-  loading: boolean;
-  error: string | null;
-}
-
-export function useClienteDashboardViewModel(): ClienteDashboardViewModelState {
-  const [data, setData] = useState<ClienteDashboardUI | null>(null);
+export function useClienteDashboardViewModel() {
+  const [citas,   setCitas]   = useState<GetCitaResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error,   setError]   = useState<string | null>(null);
+
+  const getUserId = (): number | null => {
+    try {
+      const stored = localStorage.getItem('user');
+      return stored ? JSON.parse(stored).id : null;
+    } catch { return null; }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const load = async () => {
+      const userId = getUserId();
+      if (!userId) { setLoading(false); return; }
       setLoading(true);
-      setError(null);
       try {
-        const dto = await clienteDashboardService.getDashboard();
-        setData(mapClienteDashboardDTOtoUI(dto));
+        const data = await clienteDashboardService.getCitas(userId);
+        setCitas(data);
       } catch {
-        setError("No se pudieron cargar los datos del dashboard.");
+        setError('No se pudieron cargar las citas.');
       } finally {
         setLoading(false);
       }
     };
-    fetchData();
+    load();
   }, []);
 
-  return { data, loading, error };
+  return { citas, loading, error };
 }

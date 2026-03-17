@@ -1,43 +1,84 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { clienteMascotasService } from "../services/clienteMascotas.service";
-import { mapMascotaDTOtoUI } from "../model/mapper";
-import { MascotaUI } from "../model/ui.model";
+import { useEffect, useState } from 'react';
+import { MascotaUI } from '../model/ui.model';
+import { MascotaClienteMapper } from '../model/mapper';
+import { clienteMascotasService } from '../services/clienteMascotas.service';
+import { createMascotaUseCase } from '../usecases/CreateMascotaUseCase';
+import { CreateMascotaRequestDTO } from '../model/dto/request/CreateMascotaRequestDTO';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { UserUIModel } from '@/modules/auth/model/ui.model';
 
-interface ClienteMascotasViewModelState {
-  mascotas: MascotaUI[];
-  loading: boolean;
-  handleVerMascota: (id: string) => void;
-  handleEditarMascota: (id: string) => void;
-  handleAgregarMascota: () => void;
-}
+export function useClienteMascotasViewModel() {
+  const [user] = useLocalStorage<UserUIModel | null>('user', null);
 
-export function useClienteMascotasViewModel(): ClienteMascotasViewModelState {
   const [mascotas, setMascotas] = useState<MascotaUI[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading,  setLoading]  = useState(true);
+  const [creating, setCreating] = useState(false);
+  const [error,    setError]    = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const dtos = await clienteMascotasService.getMascotas();
-      setMascotas(dtos.map(mapMascotaDTOtoUI));
+  const getUserId = (): number | null => {
+    try {
+      const stored = localStorage.getItem('user');
+      return stored ? JSON.parse(stored).id : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const fetchMascotas = async () => {
+    const userId = getUserId();
+    if (!userId) {
       setLoading(false);
-    };
-    fetchData();
-  }, []);
-
-  const handleVerMascota = (id: string) => {
-    console.log("[ViewModel] Ver mascota:", id);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await clienteMascotasService.getMascotas(userId);
+      setMascotas(data.map(MascotaClienteMapper.fromDTOtoUI));
+    } catch (err) {
+      console.error('fetchMascotas error:', err);
+      setError('Error al cargar las mascotas');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEditarMascota = (id: string) => {
-    console.log("[ViewModel] Editar mascota:", id);
+  const createMascota = async (
+    form: Omit<CreateMascotaRequestDTO, 'id_user'>
+  ): Promise<{ success: boolean }> => {
+    const userId = getUserId();
+    if (!userId) {
+      setError('No se pudo identificar al usuario');
+      return { success: false };
+    }
+    setCreating(true);
+    setError(null);
+    try {
+      const nueva = await createMascotaUseCase({ ...form, id_user: userId });
+      setMascotas(prev => [...prev, nueva]);
+      return { success: true };
+    } catch (err) {
+      console.error('createMascota error:', err);
+      setError('Error al registrar la mascota');
+      return { success: false };
+    } finally {
+      setCreating(false);
+    }
   };
 
-  const handleAgregarMascota = () => {
-    console.log("[ViewModel] Agregar nueva mascota");
-  };
+  // Se ejecuta cuando user se carga desde localStorage
+  useEffect(() => {
+    if (user?.id) fetchMascotas();
+  }, [user?.id]);
 
-  return { mascotas, loading, handleVerMascota, handleEditarMascota, handleAgregarMascota };
+  return {
+    mascotas,
+    loading,
+    creating,
+    error,
+    createMascota,
+    refetch: fetchMascotas,
+  };
 }

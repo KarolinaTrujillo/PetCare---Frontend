@@ -1,9 +1,11 @@
-export type EstadoCitaUI = "CONFIRMADA" | "CANCELADA" | "COMPLETADA";
+export type EstadoCitaUI = 'PENDIENTE' | 'CONFIRMADA' | 'CANCELADA' | 'COMPLETADA';
 
 export interface CitaUI {
   id: string;
-  fechaFormateada: string;  // "DOMINGO 22 DE FEB"
-  hora: string;             // "10:00"
-  titulo: string;           // "General Checkup para Firrolais"
+  fechaFormateada: string;
+  hora: string;
+  titulo: string;
+  mascotaNombre: string;
+  motivo: string;
   estado: EstadoCitaUI;
 }

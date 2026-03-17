@@ -1,10 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useVeterinarioDashboardViewModel } from "../viewmodel/useVeterinarioDashboardViewModel";
+import { VetAppointmentUI } from "../model/ui.model";
 import VetStatsCard from "./VetStatsCard";
 import VetUpcomingAppointments from "./VetUpcomingAppointments";
 import VetRecentPatients from "./VetRecentPatients";
+import { CitaDetailData } from "@/modules/citas-admin/model/dto/props/CitaDetailModalProps";
+import CitaDetailModal from "@/modules/citas-admin/view/CitaDetailModal";
 
 function CalendarIcon() {
   return (
@@ -46,15 +50,28 @@ function Spinner() {
   );
 }
 
+function mapToDetail(cita: VetAppointmentUI): CitaDetailData {
+  const especieMap: Record<string, string> = { dog: "Perro", cat: "Gato", bird: "Ave", other: "Otro" };
+  return {
+    nombre: cita.patientName,
+    raza: cita.patientBreed,
+    especie: especieMap[cita.patientSpecies] ?? cita.patientSpecies,
+    propietario: cita.ownerName,
+    servicio: cita.service,
+    hora: cita.time,
+  };
+}
+
 export default function VeterinarioDashboardPage() {
   const { stats, upcomingAppointments, recentPatients, loading } =
     useVeterinarioDashboardViewModel();
+  const [selectedCita, setSelectedCita] = useState<VetAppointmentUI | null>(null);
+  const router = useRouter();
 
   if (loading) return <Spinner />;
 
   return (
     <div style={{ padding: "32px", backgroundColor: "#F7F9FB", minHeight: "100vh" }}>
-      {/* Header */}
       <div style={{ marginBottom: "24px" }}>
         <h1 style={{ fontSize: "22px", fontWeight: 800, color: "#1F2937", margin: 0 }}>
           Panel principal
@@ -64,7 +81,6 @@ export default function VeterinarioDashboardPage() {
         </p>
       </div>
 
-      {/* Stats row */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "24px" }}>
         <VetStatsCard
           title="Citas hoy"
@@ -80,11 +96,21 @@ export default function VeterinarioDashboardPage() {
         />
       </div>
 
-      {/* Bottom section */}
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "20px" }}>
-        <VetUpcomingAppointments appointments={upcomingAppointments} />
+        <VetUpcomingAppointments
+          appointments={upcomingAppointments}
+          onDetalles={setSelectedCita}
+          onVerTodas={() => router.push("/veterinario/citas")}
+        />
         <VetRecentPatients patients={recentPatients} />
       </div>
+
+      {selectedCita && (
+        <CitaDetailModal
+          data={mapToDetail(selectedCita)}
+          onClose={() => setSelectedCita(null)}
+        />
+      )}
     </div>
   );
 }
