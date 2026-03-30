@@ -45,7 +45,8 @@ export const AuthCallbackContent = () => {
         default:
           router.push(Routes.dashboard.cliente.overview)
       }
-    } catch {
+    } catch (error) {
+      console.error("Auth error", error)
       router.push(Routes.auth.login)
     }
   }, [])
