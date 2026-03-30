@@ -13,7 +13,11 @@ export const AuthCallbackContent = () => {
 
   useEffect(() => {
     const token = searchParams.get('token')
+    console.log('===> URL:', window.location.href)
+    console.log('===> Token desde searchParams:', token)
+
     if (!token) {
+      console.log('===> Token null, redirigiendo al login')
       router.push(Routes.auth.login)
       return
     }
