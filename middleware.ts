@@ -3,12 +3,6 @@ import type { NextRequest } from 'next/server'
 
 const PUBLIC_ROUTES = ['/', '/login', '/register', '/auth/forgot-password', '/auth/reset-password', '/auth/callback']
 
-const ROLE_ROUTES: Record<string, string> = {
-  '/dashboard/cliente': 'USER',
-  '/dashboard/admin': 'ADMIN',
-  '/dashboard/veterinario': 'VETERINARIO',
-}
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
@@ -21,7 +15,6 @@ export function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get('token')?.value
-
   const authHeader = request.headers.get('authorization')
   const hasAuth = token || authHeader
 
@@ -44,7 +37,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
-    if (pathname.startsWith('/dashboard/cliente') && rol !== 'USER') {
+    if (pathname.startsWith('/dashboard/cliente') && rol !== 'CLIENTE') {
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
