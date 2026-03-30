@@ -19,7 +19,8 @@ export const AuthCallbackContent = () => {
     }
 
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]))
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
+      const payload = JSON.parse(atob(base64))
       const user = {
         id: payload.id,
         email: payload.email,
