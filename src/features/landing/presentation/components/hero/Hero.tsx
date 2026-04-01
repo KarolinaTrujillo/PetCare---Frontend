@@ -1,10 +1,14 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { cn } from '@/src/core/lib/utils'
 import { InteractiveGridPattern } from '@/src/core/components/ui/interactive-grid-pattern'
+import { Routes } from '@/src/core/navigator/routes'
 
 export const HeroComponent = () => {
+  const router = useRouter()
+
   return (
     <section className="relative min-h-screen bg-white flex items-center px-6 md:px-14 lg:px-24 py-24 font-sans overflow-hidden">
 
@@ -40,10 +44,18 @@ export const HeroComponent = () => {
           </p>
 
           <div className="flex flex-wrap gap-3 mt-1">
-            <button className="bg-[#267A6E] text-white rounded-full px-8 py-3.5 text-sm font-medium tracking-wide transition-all duration-200 hover:bg-[#1d6259] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#267A6E]/25">
+            <button
+              onClick={() => router.push(Routes.auth.login)}
+              className="bg-[#267A6E] text-white rounded-full px-8 py-3.5 text-sm font-medium tracking-wide transition-all duration-200 hover:bg-[#1d6259] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#267A6E]/25"
+            >
               Agendar cita
             </button>
-            <button className="bg-transparent text-[#000000] border border-[#000000] rounded-full px-8 py-3.5 text-sm font-medium tracking-wide transition-all duration-200 hover:bg-[#000000] hover:text-white hover:-translate-y-0.5">
+            <button
+              onClick={() => {
+                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+              className="bg-transparent text-[#000000] border border-[#000000] rounded-full px-8 py-3.5 text-sm font-medium tracking-wide transition-all duration-200 hover:bg-[#000000] hover:text-white hover:-translate-y-0.5"
+            >
               Nuestros servicios
             </button>
           </div>
@@ -71,13 +83,7 @@ export const HeroComponent = () => {
             ))}
           </div>
           <div className="relative z-10 w-[380px] h-[420px] animate-bounce [animation-duration:3s] [animation-timing-function:ease-in-out]">
-            <Image
-              src="/pet.webp"
-              alt="Mascota"
-              fill
-              className="object-contain"
-              priority
-            />
+            <Image src="/pet.webp" alt="Mascota" fill className="object-contain" priority />
           </div>
 
           <div className="absolute bottom-10 -left-2 z-20 bg-white rounded-2xl shadow-lg border border-black/[0.04] px-4 py-3 flex items-center gap-3">
@@ -107,4 +113,4 @@ export const HeroComponent = () => {
       </div>
     </section>
   )
-} 
+}

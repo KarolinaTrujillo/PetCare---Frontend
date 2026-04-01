@@ -1,14 +1,16 @@
 'use client'
-
+import { useRouter } from 'next/navigation'
 import { ServiceCard } from './ServiceCard'
 import { services } from '../../data/services.data'
 import { WordRotateConfetti } from '@/src/core/components/ui/WordRotateConfetti'
+import { Routes } from '@/src/core/navigator/routes'
 
 export const ServicesComponent = () => {
+  const router = useRouter()
+
   return (
     <section id="services" className="bg-white px-6 md:px-14 lg:px-24 py-24 font-sans">
       <div className="max-w-7xl mx-auto">
-
         <div className="flex items-center justify-between mb-14">
           <div>
             <span className="text-xs font-medium tracking-widest uppercase text-[#267A6E]">
@@ -22,10 +24,18 @@ export const ServicesComponent = () => {
             </p>
           </div>
 
-          <WordRotateConfetti 
-            className="text-4xl md:text-5xl font-bold text-[#267A6E]"
-            words={['Salud', 'Bienestar', 'Cuidado', 'Amor']}
-          />
+          <div className="flex flex-col items-end gap-4">
+            <WordRotateConfetti
+              className="text-4xl md:text-5xl font-bold text-[#267A6E]"
+              words={['Salud', 'Bienestar', 'Cuidado', 'Amor']}
+            />
+            <button
+              onClick={() => router.push(Routes.auth.login)}
+              className="bg-[#267A6E] text-white rounded-full px-8 py-3.5 text-sm font-medium tracking-wide transition-all duration-200 hover:bg-[#1d6259] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#267A6E]/25"
+            >
+              Agendar consulta
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-8 justify-start">
@@ -38,7 +48,6 @@ export const ServicesComponent = () => {
             />
           ))}
         </div>
-
       </div>
     </section>
   )
