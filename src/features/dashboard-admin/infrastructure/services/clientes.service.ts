@@ -7,4 +7,8 @@ export const clientesService = {
     const lista = Array.isArray(data) ? data : data.data ?? []
     return lista.filter((c: any) => c.rol === 'USER' || c.rol === 'CLIENTE' || !c.rol)
   },
+
+  deleteCliente: async (id: number): Promise<void> => {
+    await httpClient.delete(`/auth/users/${id}?rol=USER`)
+  },
 }
