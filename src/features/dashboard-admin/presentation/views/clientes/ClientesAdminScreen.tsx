@@ -3,15 +3,18 @@
 import { useState } from 'react'
 import { NavBarAdminComponent } from '../../components/NavBarAdmin'
 import { useClientesViewModel } from '../../viewmodels/clientes.viewmodel'
+import { ModalConfirmarEliminar } from '../../components/ModalConfirmarEliminar'
 import { LoaderOne } from '@/src/core/components/ui/loader'
 import { Users, Search, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Cliente } from '../../../domain/entities/cliente.entity'
 
 const ITEMS_PER_PAGE = 10
 
 export const ClientesAdminScreen = () => {
-  const { clientes, isLoading, error } = useClientesViewModel()
+  const { clientes, isLoading, isDeleting, error, deleteCliente } = useClientesViewModel()
   const [busqueda, setBusqueda] = useState('')
-  const [pagina, setPagina] = useState(1)
+  const [pagina, setPagina]     = useState(1)
+  const [clienteAEliminar, setClienteAEliminar] = useState<Cliente | null>(null)
 
   const clientesFiltrados = clientes.filter(c =>
     `${c.nombre} ${c.apellido}`.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -19,11 +22,17 @@ export const ClientesAdminScreen = () => {
     (c.telefono ?? '').includes(busqueda)
   )
 
-  const totalPaginas = Math.ceil(clientesFiltrados.length / ITEMS_PER_PAGE)
+  const totalPaginas     = Math.ceil(clientesFiltrados.length / ITEMS_PER_PAGE)
   const clientesPaginados = clientesFiltrados.slice(
     (pagina - 1) * ITEMS_PER_PAGE,
     pagina * ITEMS_PER_PAGE
   )
+
+  const handleConfirmarEliminar = async () => {
+    if (!clienteAEliminar) return
+    await deleteCliente(clienteAEliminar)
+    setClienteAEliminar(null)
+  }
 
   if (isLoading) {
     return (
@@ -77,7 +86,7 @@ export const ClientesAdminScreen = () => {
                   <th className="px-6 py-4 text-left font-semibold">Cliente</th>
                   <th className="px-6 py-4 text-left font-semibold">Email</th>
                   <th className="px-6 py-4 text-left font-semibold">Teléfono</th>
-                  <th className="px-6 py-4 text-left font-semibold">Acciones</th>
+                  <th className="px-6 py-4 text-left font-semibold"></th>
                 </tr>
               </thead>
               <tbody>
@@ -94,14 +103,16 @@ export const ClientesAdminScreen = () => {
                     <td className="px-6 py-4 text-gray-500">{c.email}</td>
                     <td className="px-6 py-4 text-gray-500">{c.telefono ?? '—'}</td>
                     <td className="px-6 py-4">
-                      <button className="flex items-center gap-1 text-xs text-red-400 hover:text-red-600 border border-red-100 hover:border-red-200 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-full transition-colors cursor-pointer">
-                        <Trash2 size={11} /> Eliminar
+                      <button
+                        onClick={() => setClienteAEliminar(c)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
+                        <Trash2 size={15} />
                       </button>
                     </td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-sm text-gray-400">
+                    <td colSpan={4} className="px-6 py-12 text-center text-sm text-gray-400">
                       No se encontraron clientes
                     </td>
                   </tr>
@@ -110,25 +121,16 @@ export const ClientesAdminScreen = () => {
             </table>
           </div>
 
-          {/* Paginación */}
           {totalPaginas > 1 && (
             <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
-              <p className="text-xs text-gray-400">
-                Página {pagina} de {totalPaginas}
-              </p>
+              <p className="text-xs text-gray-400">Página {pagina} de {totalPaginas}</p>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setPagina(p => Math.max(1, p - 1))}
-                  disabled={pagina === 1}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                >
+                <button onClick={() => setPagina(p => Math.max(1, p - 1))} disabled={pagina === 1}
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
                   <ChevronLeft size={14} />
                 </button>
-                <button
-                  onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))}
-                  disabled={pagina === totalPaginas}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                >
+                <button onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))} disabled={pagina === totalPaginas}
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
                   <ChevronRight size={14} />
                 </button>
               </div>
@@ -137,6 +139,15 @@ export const ClientesAdminScreen = () => {
         </div>
 
       </div>
+
+      <ModalConfirmarEliminar
+        isOpen={!!clienteAEliminar}
+        nombre={clienteAEliminar ? `${clienteAEliminar.nombre} ${clienteAEliminar.apellido}` : ''}
+        onConfirm={handleConfirmarEliminar}
+        onClose={() => setClienteAEliminar(null)}
+        isLoading={isDeleting}
+      />
+
     </div>
   )
 }

@@ -25,4 +25,8 @@ export const personalService = {
   deletePersonal: async (id: number, rol: string): Promise<void> => {
     await httpClient.delete(`/auth/users/${id}?rol=${rol}`)
   },
+
+  deleteCliente: async (id: number): Promise<void> => {
+    await httpClient.delete(`/auth/users/${id}?rol=USER`)
+  },
 }
