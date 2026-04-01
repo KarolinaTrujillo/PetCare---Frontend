@@ -21,4 +21,8 @@ export const personalService = {
   crearAdmin: async (payload: any): Promise<void> => {
     await httpClient.post('/auth/register', payload)
   },
+
+  deletePersonal: async (id: number, rol: string): Promise<void> => {
+    await httpClient.delete(`/auth/users/${id}?rol=${rol}`)
+  },
 }

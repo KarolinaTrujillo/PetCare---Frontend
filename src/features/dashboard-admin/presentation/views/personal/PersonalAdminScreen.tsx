@@ -5,8 +5,10 @@ import { NavBarAdminComponent } from '../../components/NavBarAdmin'
 import { usePersonalViewModel } from '../../viewmodels/personal.viewmodel'
 import { ModalCrearVeterinario } from '../../components/ModalCrearVeterinario'
 import { ModalCrearAdmin } from '../../components/ModalCrearAdmin'
+import { ModalConfirmarEliminar } from '../../components/ModalConfirmarEliminar'
 import { LoaderOne } from '@/src/core/components/ui/loader'
-import { UserCog, Shield, Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { UserCog, Shield, Search, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
+import { Personal } from '../../../domain/entities/personal.entity'
 
 const rolStyles: Record<string, string> = {
   ADMIN:       'bg-purple-100 text-purple-700',
@@ -16,12 +18,13 @@ const rolStyles: Record<string, string> = {
 const ITEMS_PER_PAGE = 10
 
 export const PersonalAdminScreen = () => {
-  const { personal, isLoading, error, refetch } = usePersonalViewModel()
-  const [busqueda, setBusqueda] = useState('')
+  const { personal, isLoading, error, isDeleting, refetch, deletePersonal } = usePersonalViewModel()
+  const [busqueda, setBusqueda]   = useState('')
   const [filtroRol, setFiltroRol] = useState<'TODOS' | 'ADMIN' | 'VETERINARIO'>('TODOS')
-  const [pagina, setPagina] = useState(1)
-  const [modalVet, setModalVet] = useState(false)
+  const [pagina, setPagina]       = useState(1)
+  const [modalVet, setModalVet]   = useState(false)
   const [modalAdmin, setModalAdmin] = useState(false)
+  const [personalAEliminar, setPersonalAEliminar] = useState<Personal | null>(null)
 
   const personalFiltrado = personal
     .filter(p => filtroRol === 'TODOS' || p.rol === filtroRol)
@@ -31,11 +34,17 @@ export const PersonalAdminScreen = () => {
       (p.especialidad ?? '').toLowerCase().includes(busqueda.toLowerCase())
     )
 
-  const totalPaginas = Math.ceil(personalFiltrado.length / ITEMS_PER_PAGE)
+  const totalPaginas    = Math.ceil(personalFiltrado.length / ITEMS_PER_PAGE)
   const personalPaginado = personalFiltrado.slice(
     (pagina - 1) * ITEMS_PER_PAGE,
     pagina * ITEMS_PER_PAGE
   )
+
+  const handleConfirmarEliminar = async () => {
+    if (!personalAEliminar) return
+    await deletePersonal(personalAEliminar)
+    setPersonalAEliminar(null)
+  }
 
   if (isLoading) {
     return (
@@ -114,6 +123,7 @@ export const PersonalAdminScreen = () => {
                   <th className="px-6 py-4 text-left font-semibold">Teléfono</th>
                   <th className="px-6 py-4 text-left font-semibold">Especialidad</th>
                   <th className="px-6 py-4 text-left font-semibold">Rol</th>
+                  <th className="px-6 py-4 text-left font-semibold"></th>
                 </tr>
               </thead>
               <tbody>
@@ -135,10 +145,17 @@ export const PersonalAdminScreen = () => {
                         {p.rol}
                       </span>
                     </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => setPersonalAEliminar(p)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
+                        <Trash2 size={15} />
+                      </button>
+                    </td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-sm text-gray-400">
+                    <td colSpan={6} className="px-6 py-12 text-center text-sm text-gray-400">
                       No se encontró personal
                     </td>
                   </tr>
@@ -168,6 +185,13 @@ export const PersonalAdminScreen = () => {
 
       <ModalCrearVeterinario isOpen={modalVet} onClose={() => setModalVet(false)} onSuccess={() => { refetch(); setModalVet(false) }} />
       <ModalCrearAdmin isOpen={modalAdmin} onClose={() => setModalAdmin(false)} onSuccess={() => { refetch(); setModalAdmin(false) }} />
+      <ModalConfirmarEliminar
+        isOpen={!!personalAEliminar}
+        nombre={personalAEliminar ? `${personalAEliminar.nombre} ${personalAEliminar.apellido}` : ''}
+        onConfirm={handleConfirmarEliminar}
+        onClose={() => setPersonalAEliminar(null)}
+        isLoading={isDeleting}
+      />
 
     </div>
   )
