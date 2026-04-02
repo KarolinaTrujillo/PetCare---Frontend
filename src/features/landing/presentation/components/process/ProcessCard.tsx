@@ -5,7 +5,7 @@ import { ProcessCardProps } from "../../types/process.types"
 export const ProcessCard = ({ number, title, description, index }: ProcessCardProps) => {
   return (
     <div
-      className="relative rounded-2xl p-8 flex flex-col gap-3"
+      className="process-card relative rounded-2xl p-6 md:p-8 flex flex-col gap-3"
       style={{ backgroundColor: '#30302E', marginTop: `${index * 2}rem` }}
     >
       <span

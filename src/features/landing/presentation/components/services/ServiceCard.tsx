@@ -4,7 +4,7 @@ import { ServiceCardProps } from '../../types/services.types'
 
 export const ServiceCard = ({ title, icon, details }: ServiceCardProps) => {
   return (
-    <div className="group relative block h-64 w-[260px]">
+    <div className="group relative block h-64 w-full max-w-[260px]">
       <span className="absolute inset-0 border-2 border-dashed border-[#267A6E]" />
 
       <div className="relative flex h-full transform flex-col justify-end border-2 border-[#267A6E] bg-white transition-transform duration-300 group-hover:-translate-x-2 group-hover:-translate-y-2 overflow-hidden">

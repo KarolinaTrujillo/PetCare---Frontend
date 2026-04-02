@@ -1,4 +1,5 @@
 'use client'
+
 import { useRouter } from 'next/navigation'
 import { ServiceCard } from './ServiceCard'
 import { services } from '../../data/services.data'
@@ -11,7 +12,9 @@ export const ServicesComponent = () => {
   return (
     <section id="services" className="bg-white px-6 md:px-14 lg:px-24 py-24 font-sans">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-14">
+
+        {/* Header de sección */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-14">
           <div>
             <span className="text-xs font-medium tracking-widest uppercase text-[#267A6E]">
               Lo que ofrecemos
@@ -24,7 +27,7 @@ export const ServicesComponent = () => {
             </p>
           </div>
 
-          <div className="flex flex-col items-end gap-4">
+          <div className="flex flex-col items-start md:items-end gap-4">
             <WordRotateConfetti
               className="text-4xl md:text-5xl font-bold text-[#267A6E]"
               words={['Salud', 'Bienestar', 'Cuidado', 'Amor']}
@@ -38,7 +41,8 @@ export const ServicesComponent = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-8 justify-start">
+        {/* Grid de cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
           {services.map((service) => (
             <ServiceCard
               key={service.title}
@@ -48,6 +52,7 @@ export const ServicesComponent = () => {
             />
           ))}
         </div>
+
       </div>
     </section>
   )

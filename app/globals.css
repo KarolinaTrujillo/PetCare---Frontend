@@ -163,3 +163,9 @@ body {
 .animate-ripple {
   animation: ripple 3s ease-in-out infinite;
 }
+
+@media (max-width: 767px) {
+  .process-card {
+    margin-top: 0 !important;
+  }
+}
