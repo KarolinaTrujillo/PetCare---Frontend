@@ -26,7 +26,9 @@ export const LoginScreen = () => {
       <Alert alert={alert} onClose={hideAlert} />
 
       <div className="flex flex-1">
-        <div className="flex flex-1 flex-col justify-center px-10 md:px-24 lg:px-36 py-12">
+
+        {/* Columna formulario */}
+        <div className="flex flex-1 flex-col justify-center items-center md:items-start px-6 sm:px-10 md:px-24 lg:px-36 py-12">
           <div className="w-full max-w-sm">
 
             <h1 className="text-2xl font-bold text-gray-900 mb-1">Iniciar sesión</h1>
@@ -111,6 +113,7 @@ export const LoginScreen = () => {
           </div>
         </div>
 
+        {/* Columna imagen — solo visible en md+ */}
         <div className="hidden md:flex flex-1 items-end justify-end">
           <img
             src="pet-login.webp"
@@ -118,6 +121,7 @@ export const LoginScreen = () => {
             className="h-full max-h-[600px] w-auto object-contain object-right-bottom"
           />
         </div>
+
       </div>
     </div>
   )

@@ -35,6 +35,7 @@ export const RegisterScreen = () => {
 
       <div className="flex flex-1">
 
+        {/* Imagen — solo visible en md+ */}
         <div className="hidden md:flex flex-1 items-end justify-start">
           <img
             src="pet-register.webp"
@@ -43,7 +44,8 @@ export const RegisterScreen = () => {
           />
         </div>
 
-        <div className="flex flex-1 flex-col justify-center px-10 md:px-16 lg:px-24 py-12">
+        {/* Columna formulario */}
+        <div className="flex flex-1 flex-col justify-center items-center md:items-start px-6 sm:px-10 md:px-16 lg:px-24 py-12">
           <div className="w-full max-w-sm">
 
             <h1 className="text-2xl font-bold text-gray-900 mb-1">Crear cuenta</h1>
