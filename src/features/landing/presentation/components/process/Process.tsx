@@ -1,31 +1,36 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Ripple } from '@/src/core/components/ui/ripple'
 import { steps } from '../../data/process.data'
 import { ProcessCard } from './ProcessCard'
 import { CalendarDays } from 'lucide-react'
+import { Routes } from '@/src/core/navigator/routes'
 
 export const ProcessComponent = () => {
+  const router = useRouter()
+
   return (
     <section
       id="how"
-      className="relative w-full min-h-[500px] bg-white px-6 md:px-14 lg:px-24 py-24 font-sans"
+      className="relative w-full min-h-[500px] bg-white px-6 md:px-14 lg:px-24 py-16 md:py-24 font-sans"
     >
       <div
         className="absolute right-0 top-0 w-1/2 pointer-events-none overflow-hidden"
         style={{ height: '100%', minHeight: '500px' }}
       >
-      <Ripple
-        mainCircleSize={300}
-        mainCircleOpacity={0.35}
-        numCircles={6}
-        color="#267A6E"
+        <Ripple
+          mainCircleSize={300}
+          mainCircleOpacity={0.35}
+          numCircles={6}
+          color="#267A6E"
         />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
 
-        <div className="mb-14">
+        {/* Header de sección */}
+        <div className="mb-10 md:mb-14">
           <span className="text-xs font-medium tracking-widest uppercase text-[#267A6E]">
             Cómo funciona
           </span>
@@ -37,7 +42,8 @@ export const ProcessComponent = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_40px_1fr_40px_1fr] items-start">
+        {/* Cards */}
+        <div className="flex flex-col gap-4 md:grid md:grid-cols-[1fr_40px_1fr_40px_1fr] md:items-start md:gap-0">
           {steps.map((step, i) => (
             <>
               <ProcessCard
@@ -55,19 +61,12 @@ export const ProcessComponent = () => {
                   style={{ marginTop: `${i * 2 + 3}rem` }}
                 >
                   <svg width="24" height="24" fill="none" stroke="#267A6E" strokeWidth="1.5" viewBox="0 0 24 24">
-                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                    <path d="M5 12h14M13 6l6 6-6 6" />
                   </svg>
                 </div>
               )}
             </>
           ))}
-        </div>
-
-        <div className="mt-14">
-          <button className="bg-[#267A6E] hover:bg-[#1d6259] text-white text-sm font-semibold px-8 py-3.5 rounded-full transition-colors duration-200 cursor-pointer flex items-center gap-2">
-            <CalendarDays size={16} />
-            Agendar consulta
-          </button>
         </div>
 
       </div>
