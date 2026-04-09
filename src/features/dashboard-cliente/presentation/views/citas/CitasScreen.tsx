@@ -8,6 +8,8 @@ import { useState } from "react"
 import { citaToCardProps } from "@/src/core/mappers/cita.mapper"
 import { useCitasViewModel } from "../../viewmodels/citas.viewmodel"
 import { LoaderOne } from "@/src/core/components/ui/loader"
+import { ModalAgendarCita } from '../../components/ModalAgendarCita'
+import { useMascotasViewModel } from '../../viewmodels/mascotas.viewmodel'
 
 const estadoOpciones = ['TODAS', 'PENDIENTE', 'CONFIRMADA', 'CANCELADA', 'COMPLETADA'] as const
 
@@ -21,8 +23,10 @@ const estadoStyles: Record<string, string> = {
 
 export const CitasScreen = () => {
   const { citas, isLoading, error } = useCitasViewModel()
+  const { mascotas } = useMascotasViewModel()
   const [filtro, setFiltro] = useState<string>('TODAS')
   const [busqueda, setBusqueda] = useState('')
+  const [modalCita, setModalCita] = useState(false)
 
   const citasFiltradas = citas
     .filter(c => filtro === 'TODAS' || c.estado === filtro)
@@ -66,7 +70,10 @@ export const CitasScreen = () => {
             <span className="text-sm text-gray-400">{citasFiltradas.length} resultado{citasFiltradas.length !== 1 ? 's' : ''}</span>
           </div>
 
-          <button className="flex items-center gap-2 bg-[#267A6E] hover:bg-[#1d6259] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer">
+          <button
+            onClick={() => setModalCita(true)}
+            className="flex items-center gap-2 bg-[#267A6E] hover:bg-[#1d6259] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer"
+          >
             <CalendarDays size={16} />
             Agendar Cita
           </button>
@@ -129,6 +136,13 @@ export const CitasScreen = () => {
         )}
 
       </div>
+
+      <ModalAgendarCita
+        isOpen={modalCita}
+        onClose={() => setModalCita(false)}
+        onSuccess={() => {}}
+        mascotas={mascotas}
+      />
     </div>
   )
 }

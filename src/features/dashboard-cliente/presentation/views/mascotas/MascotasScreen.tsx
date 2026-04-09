@@ -7,11 +7,13 @@ import { PawPrint, Search } from "lucide-react"
 import { useState } from "react"
 import { useMascotasViewModel } from "../../viewmodels/mascotas.viewmodel"
 import { LoaderOne } from "@/src/core/components/ui/loader"
+import { ModalAgregarMascota } from '../../components/ModalAgregarMascota'
 
 export const MascotasScreen = () => {
   const { mascotas, isLoading, error } = useMascotasViewModel()
   const [busqueda, setBusqueda] = useState('')
   const [filtroEspecie, setFiltroEspecie] = useState<'TODAS' | 'Perro' | 'Gato'>('TODAS')
+  const [modalMascota, setModalMascota] = useState(false)
 
   const mascotasFiltradas = mascotas
     .filter(m => filtroEspecie === 'TODAS' || m.especie === filtroEspecie)
@@ -54,7 +56,10 @@ export const MascotasScreen = () => {
             </span>
           </div>
 
-          <button className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer">
+          <button
+            onClick={() => setModalMascota(true)}
+            className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer"
+          >
             <PawPrint size={16} />
             Agregar Mascota
           </button>
@@ -117,6 +122,12 @@ export const MascotasScreen = () => {
         )}
 
       </div>
+
+      <ModalAgregarMascota
+        isOpen={modalMascota}
+        onClose={() => setModalMascota(false)}
+        onSuccess={() => {}}
+      />
     </div>
   )
 }
