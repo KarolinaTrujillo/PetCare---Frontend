@@ -45,9 +45,9 @@ export const OverviewScreen = () => {
         subtitle="Gestiona tu contenido aqui..."
       />
 
-      <div className="flex flex-col flex-1 px-6 py-8 gap-6 overflow-hidden">
+      <div className="flex flex-col flex-1 px-4 md:px-6 py-4 md:py-8 gap-4 md:gap-6 overflow-y-auto">
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <CalendarDays size={20} className="text-[#267A6E]" />
@@ -59,19 +59,25 @@ export const OverviewScreen = () => {
             </a>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button onClick={() => setModalCita(true)} className="flex items-center gap-2 bg-[#267A6E] hover:bg-[#1d6259] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer">
-              <CalendarDays size={16} />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setModalCita(true)}
+              className="flex items-center gap-2 bg-[#267A6E] hover:bg-[#1d6259] text-white text-xs md:text-sm font-semibold px-3 md:px-5 py-2 md:py-2.5 rounded-full transition-colors cursor-pointer"
+            >
+              <CalendarDays size={14} />
               Agendar Cita
             </button>
-            <button onClick={() => setModalMascota(true)} className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer">
+            <button
+              onClick={() => setModalMascota(true)}
+              className="flex items-center gap-2 bg-black hover:bg-gray-800 text-white text-xs md:text-sm font-semibold px-3 md:px-5 py-2 md:py-2.5 rounded-full transition-colors cursor-pointer"
+            >
               Agregar Mascota
             </button>
           </div>
         </div>
 
         {recentAppointments.length > 0 && (
-          <div className="grid grid-cols-2 gap-3 overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {recentAppointments.map((a) => (
               <CardOverViewComponent key={a.id} {...a} />
             ))}
@@ -90,7 +96,7 @@ export const OverviewScreen = () => {
         </div>
 
         {recentPets.length > 0 && (
-          <div className="grid grid-cols-2 gap-3 overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {recentPets.map((p) => (
               <CardPetOverViewComponent key={p.id} {...p} />
             ))}
@@ -98,22 +104,21 @@ export const OverviewScreen = () => {
         )}
 
         {recentAppointments.length === 0 && recentPets.length === 0 && (
-          <div className="relative flex-1 flex flex-col items-center overflow-hidden -mx-6 -mb-8">
-            <div className="mt-16 z-10 flex flex-col items-center gap-2">
-              <p className="text-gray-900 text-3xl font-semibold">No tienes citas ni mascotas recientes</p>
-              <div className="flex items-center gap-2 text-2xl font-bold text-[#267A6E]">
+          <div className="relative flex-1 flex flex-col items-center overflow-hidden -mx-4 md:-mx-6 -mb-4 md:-mb-8">
+            <div className="mt-8 md:mt-16 z-10 flex flex-col items-center gap-2 px-4 text-center">
+              <p className="text-gray-900 text-xl md:text-3xl font-semibold">No tienes citas ni mascotas recientes</p>
+              <div className="flex items-center gap-2 text-lg md:text-2xl font-bold text-[#267A6E]">
                 <span>Priorizamos tu</span>
                 <WordRotateConfetti
                   words={['Salud', 'Bienestar', 'Cuidado', 'Amor']}
-                  className="text-2xl font-bold text-[#267A6E]"
+                  className="text-lg md:text-2xl font-bold text-[#267A6E]"
                 />
               </div>
             </div>
             <img
               src="/overview-pet.webp"
               alt="Overview"
-              style={{ width: '63rem' }}
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 object-contain"
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 object-contain w-[90vw] md:w-[63rem]"
             />
           </div>
         )}
