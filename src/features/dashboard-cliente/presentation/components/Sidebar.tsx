@@ -7,10 +7,20 @@ import { useRouter } from 'next/navigation'
 import { Routes } from '@/src/core/navigator/routes'
 import { links } from '../data/sidebar.data'
 import Cookies from 'js-cookie'
+import { getUsuarioLocal } from '@/src/core/lib/auth/get-usuario-local'
 
 export const SidebarComponent = () => {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const usuario = getUsuarioLocal()
+
+  const iniciales = usuario
+    ? `${usuario.nombre?.[0] ?? ''}${usuario.apellido?.[0] ?? ''}`.toUpperCase()
+    : 'U'
+
+  const nombreCompleto = usuario
+    ? `${usuario.nombre} ${usuario.apellido}`
+    : 'Usuario'
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -18,6 +28,18 @@ export const SidebarComponent = () => {
     Cookies.remove('token')
     router.push(Routes.auth.login)
   }
+
+  const avatarIcon = usuario?.avatar_url ? (
+    <img
+      src={usuario.avatar_url}
+      alt={nombreCompleto}
+      className="w-7 h-7 rounded-full object-cover shrink-0"
+    />
+  ) : (
+    <div className="w-7 h-7 rounded-full bg-[#267A6E] flex items-center justify-center text-white text-xs font-bold shrink-0">
+      {iniciales}
+    </div>
+  )
 
   return (
     <Sidebar open={open} setOpen={setOpen}>
@@ -56,13 +78,9 @@ export const SidebarComponent = () => {
           </button>
           <SidebarLink
             link={{
-              label: 'Usuario',
+              label: nombreCompleto,
               href: Routes.dashboard.cliente.configuracion,
-              icon: (
-                <div className="w-7 h-7 rounded-full bg-[#267A6E] flex items-center justify-center text-white text-xs font-bold shrink-0">
-                  U
-                </div>
-              ),
+              icon: avatarIcon,
             }}
           />
         </div>
