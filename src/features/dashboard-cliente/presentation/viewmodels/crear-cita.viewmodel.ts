@@ -26,7 +26,7 @@ export const useCrearCitaViewModel = (onSuccess: () => void) => {
           to:   user.email,
           type: 'CITA_AGENDADA',
           data: {
-            nombre:   `${user.nombre} ${user.apellido}`,
+            nombre:   `${(user.nombre ?? '').trim()} ${(user.apellido ?? '').trim()}`.trim(),
             fecha:    fecha.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' }),
             hora:     fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
             servicio: 'Consulta en PetCare',
