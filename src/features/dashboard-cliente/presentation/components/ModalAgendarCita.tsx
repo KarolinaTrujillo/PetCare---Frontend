@@ -82,7 +82,9 @@ export const ModalAgendarCita = ({ isOpen, onClose, onSuccess, mascotas }: Modal
       id_servicio: parseInt(idServicio),
       id_veterinario: parseInt(idVeterinario),
       id_agenda: parseInt(idAgenda),
-      fecha: agendaSeleccionada?.fecha ?? '',
+      fecha: agendaSeleccionada
+        ? `${agendaSeleccionada.fecha.split('T')[0]}T${agendaSeleccionada.hora_inicio}-06:00`
+        : '',
       observaciones_cliente: observaciones || undefined,
     })
     handleClose()
