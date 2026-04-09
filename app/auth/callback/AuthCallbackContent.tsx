@@ -29,8 +29,8 @@ export const AuthCallbackContent = () => {
         id: payload.id,
         email: payload.email,
         rol: payload.rol,
-        nombre: payload.nombre ?? '',
-        apellido: payload.apellido ?? '',
+        nombre: (payload.nombre ?? '').trim(),
+        apellido: (payload.apellido ?? '').trim(),
         telefono: payload.telefono ?? '',
       }
 
