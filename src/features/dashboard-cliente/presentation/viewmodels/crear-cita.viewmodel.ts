@@ -15,6 +15,25 @@ export const useCrearCitaViewModel = (onSuccess: () => void) => {
     try {
       setIsLoading(true)
       await createCitaUseCase.execute(data)
+
+      const user = JSON.parse(localStorage.getItem('user') ?? '{}')
+      const fecha = new Date(data.fecha)
+
+      fetch(`${process.env.NEXT_PUBLIC_NOTIFICATION_SERVICE_URL}/api/notifications/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to:   user.email,
+          type: 'CITA_AGENDADA',
+          data: {
+            nombre:   `${user.nombre} ${user.apellido}`,
+            fecha:    fecha.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' }),
+            hora:     fecha.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
+            servicio: 'Consulta en PetCare',
+          }
+        })
+      }).catch(() => {})
+
       success('¡Cita agendada!', 'Tu cita fue registrada correctamente.')
       setTimeout(() => onSuccess(), 1500)
     } catch (e: any) {
