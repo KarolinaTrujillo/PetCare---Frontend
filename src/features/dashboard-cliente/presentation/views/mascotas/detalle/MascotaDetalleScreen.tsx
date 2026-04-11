@@ -25,13 +25,11 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
     const pageW = 210
     const pageH = 297
 
-    // Cargar imagen de fondo
     const img = new Image()
     img.src = '/plantilla-historial.png'
     await new Promise(resolve => { img.onload = resolve })
     doc.addImage(img, 'PNG', 0, 0, pageW, pageH)
 
-    // Logo / título
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(20)
     doc.setTextColor(38, 122, 110)
@@ -40,11 +38,6 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
     doc.setFontSize(13)
     doc.setTextColor(50, 50, 50)
     doc.text('Historial Clínico', pageW / 2, 38, { align: 'center' })
-
-    // Datos de la mascota
-    doc.setFontSize(10)
-    doc.setFont('helvetica', 'normal')
-    doc.setTextColor(80, 80, 80)
 
     const col1 = 25
     const col2 = 115
@@ -60,46 +53,41 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
     doc.setFontSize(10)
     doc.setTextColor(60, 60, 60)
 
-    doc.text(`Nombre:`, col1, y)
+    doc.text('Nombre:', col1, y)
     doc.setFont('helvetica', 'bold')
     doc.text(`${mascota?.nombre ?? '—'}`, col1 + 22, y)
     doc.setFont('helvetica', 'normal')
-
-    doc.text(`Especie:`, col2, y)
+    doc.text('Especie:', col2, y)
     doc.setFont('helvetica', 'bold')
     doc.text(`${mascota?.especie ?? '—'}`, col2 + 22, y)
     doc.setFont('helvetica', 'normal')
     y += 6
 
-    doc.text(`Raza:`, col1, y)
+    doc.text('Raza:', col1, y)
     doc.setFont('helvetica', 'bold')
     doc.text(`${mascota?.raza ?? '—'}`, col1 + 22, y)
     doc.setFont('helvetica', 'normal')
-
-    doc.text(`Sexo:`, col2, y)
+    doc.text('Sexo:', col2, y)
     doc.setFont('helvetica', 'bold')
     doc.text(`${mascota?.sexo ?? '—'}`, col2 + 22, y)
     doc.setFont('helvetica', 'normal')
     y += 6
 
-    doc.text(`Edad:`, col1, y)
+    doc.text('Edad:', col1, y)
     doc.setFont('helvetica', 'bold')
     doc.text(`${edad !== null ? `${edad} ${edad === 1 ? 'año' : 'años'}` : '—'}`, col1 + 22, y)
     doc.setFont('helvetica', 'normal')
-
-    doc.text(`Peso:`, col2, y)
+    doc.text('Peso:', col2, y)
     doc.setFont('helvetica', 'bold')
     doc.text(`${mascota?.peso ? `${mascota.peso} kg` : '—'}`, col2 + 22, y)
     doc.setFont('helvetica', 'normal')
     y += 12
 
-    // Línea separadora
     doc.setDrawColor(38, 122, 110)
     doc.setLineWidth(0.5)
     doc.line(col1, y, pageW - col1, y)
     y += 8
 
-    // Título historial
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(11)
     doc.setTextColor(38, 122, 110)
@@ -112,7 +100,6 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
       doc.setTextColor(150, 150, 150)
       doc.text('Sin registros clínicos.', col1, y)
     } else {
-      // Encabezados tabla
       doc.setFont('helvetica', 'bold')
       doc.setFontSize(9)
       doc.setTextColor(255, 255, 255)
@@ -125,7 +112,14 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
       y += 5
 
       historial.forEach((h, i) => {
-        if (y > pageH - 40) {
+        const fecha = new Date(h.fecha).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })
+        const diagnosticoLines = doc.splitTextToSize(h.diagnostico ?? '—', 52)
+        const tratamientoLines = doc.splitTextToSize(h.tratamiento ?? '—', 42)
+        const observacionesLines = doc.splitTextToSize(h.observaciones ?? '—', 55)
+        const maxLines = Math.max(diagnosticoLines.length, tratamientoLines.length, observacionesLines.length)
+        const rowH = maxLines * 5 + 4
+
+        if (y + rowH > pageH - 40) {
           doc.addPage()
           doc.addImage(img, 'PNG', 0, 0, pageW, pageH)
           y = 30
@@ -133,24 +127,21 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
 
         if (i % 2 === 0) {
           doc.setFillColor(240, 248, 246)
-          doc.rect(col1, y - 3, pageW - col1 * 2, 8, 'F')
+          doc.rect(col1, y - 3, pageW - col1 * 2, rowH, 'F')
         }
 
         doc.setFont('helvetica', 'normal')
         doc.setFontSize(8)
         doc.setTextColor(60, 60, 60)
 
-        const fecha = new Date(h.fecha).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })
         doc.text(fecha, col1 + 2, y)
-        doc.text(doc.splitTextToSize(h.diagnostico ?? '—', 52)[0], col1 + 30, y)
-        doc.text(doc.splitTextToSize(h.tratamiento ?? '—', 42)[0], col1 + 85, y)
-        doc.text(doc.splitTextToSize(h.observaciones ?? '—', 38)[0], col1 + 130, y)
-        y += 8
+        doc.text(diagnosticoLines, col1 + 30, y)
+        doc.text(tratamientoLines, col1 + 85, y)
+        doc.text(observacionesLines, col1 + 130, y)
+        y += rowH
       })
     }
 
-    // Fecha de generación
-    y += 6
     doc.setFont('helvetica', 'italic')
     doc.setFontSize(8)
     doc.setTextColor(150, 150, 150)
@@ -198,7 +189,6 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
           </button>
         </div>
 
-        {/* Info de la mascota */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex items-center gap-6">
           <div className="w-16 h-16 rounded-full bg-[#267A6E]/10 flex items-center justify-center shrink-0">
             <PawPrint size={28} className="text-[#267A6E]" />
@@ -231,7 +221,6 @@ export const MascotaDetalleScreen = ({ mascotaId }: MascotaDetalleScreenProps) =
           </div>
         </div>
 
-        {/* Historial */}
         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col overflow-hidden">
           <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-50">
             <ClipboardList size={16} className="text-[#267A6E]" />
