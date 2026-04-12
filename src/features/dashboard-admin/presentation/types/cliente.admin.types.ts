@@ -4,5 +4,4 @@ export interface ClienteAdminProps {
   apellido: string
   email: string
   telefono: string
-  created_at: string
 }

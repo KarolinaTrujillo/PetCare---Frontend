@@ -22,7 +22,6 @@ export const ClientesAdminTable = ({ clientes }: { clientes: ClienteAdminProps[]
               <th className="px-5 py-3 text-left font-semibold">Nombre</th>
               <th className="px-5 py-3 text-left font-semibold">Email</th>
               <th className="px-5 py-3 text-left font-semibold">Teléfono</th>
-              <th className="px-5 py-3 text-left font-semibold">Registro</th>
             </tr>
           </thead>
           <tbody>
@@ -31,7 +30,6 @@ export const ClientesAdminTable = ({ clientes }: { clientes: ClienteAdminProps[]
                 <td className="px-5 py-3 font-medium text-gray-900">{c.nombre} {c.apellido}</td>
                 <td className="px-5 py-3 text-gray-500">{c.email}</td>
                 <td className="px-5 py-3 text-gray-500">{c.telefono}</td>
-                <td className="px-5 py-3 text-gray-500">{new Date(c.created_at).toLocaleDateString('es-MX')}</td>
               </tr>
             ))}
           </tbody>
