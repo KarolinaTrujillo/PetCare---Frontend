@@ -5,4 +5,5 @@ export interface Cliente {
   email: string
   telefono: string
   avatar_url?: string | null
+  created_at?: string | null
 }

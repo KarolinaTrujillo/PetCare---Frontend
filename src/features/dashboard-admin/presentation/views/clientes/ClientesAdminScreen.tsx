@@ -16,11 +16,13 @@ export const ClientesAdminScreen = () => {
   const [pagina, setPagina]     = useState(1)
   const [clienteAEliminar, setClienteAEliminar] = useState<Cliente | null>(null)
 
-  const clientesFiltrados = clientes.filter(c =>
-    `${c.nombre} ${c.apellido}`.toLowerCase().includes(busqueda.toLowerCase()) ||
-    c.email.toLowerCase().includes(busqueda.toLowerCase()) ||
-    (c.telefono ?? '').includes(busqueda)
-  )
+  const clientesFiltrados = clientes
+    .filter(c =>
+      `${c.nombre} ${c.apellido}`.toLowerCase().includes(busqueda.toLowerCase()) ||
+      c.email.toLowerCase().includes(busqueda.toLowerCase()) ||
+      (c.telefono ?? '').includes(busqueda)
+    )
+    .sort((a: any, b: any) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime())
 
   const totalPaginas     = Math.ceil(clientesFiltrados.length / ITEMS_PER_PAGE)
   const clientesPaginados = clientesFiltrados.slice(
