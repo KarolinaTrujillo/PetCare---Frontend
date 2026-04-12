@@ -8,17 +8,26 @@ import { useState } from "react"
 import { useMascotasViewModel } from "../../viewmodels/mascotas.viewmodel"
 import { LoaderOne } from "@/src/core/components/ui/loader"
 import { ModalAgregarMascota } from '../../components/ModalAgregarMascota'
+import { ModalEditarMascota } from '../../components/ModalEditarMascota'
+import { Mascota } from '@/src/features/dashboard-cliente/domain/entities/mascota.entity'
 
 export const MascotasScreen = () => {
   const { mascotas, isLoading, error } = useMascotasViewModel()
   const [busqueda, setBusqueda] = useState('')
   const [filtroEspecie, setFiltroEspecie] = useState<'TODAS' | 'Perro' | 'Gato'>('TODAS')
   const [modalMascota, setModalMascota] = useState(false)
+  const [modalEditar, setModalEditar] = useState(false)
+  const [mascotaSeleccionada, setMascotaSeleccionada] = useState<Mascota | null>(null)
 
   const mascotasFiltradas = mascotas
     .filter(m => filtroEspecie === 'TODAS' || m.especie === filtroEspecie)
     .filter(m => m.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
                  (m.raza ?? '').toLowerCase().includes(busqueda.toLowerCase()))
+
+  const handleEditar = (mascota: Mascota) => {
+    setMascotaSeleccionada(mascota)
+    setModalEditar(true)
+  }
 
   if (isLoading) {
     return (
@@ -95,7 +104,11 @@ export const MascotasScreen = () => {
         {mascotasFiltradas.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {mascotasFiltradas.map(m => (
-              <CardMascotaComponent key={m.id} {...m} />
+              <CardMascotaComponent
+                key={m.id}
+                {...m}
+                onEditar={() => handleEditar(m)}
+              />
             ))}
           </div>
         ) : (
@@ -123,7 +136,14 @@ export const MascotasScreen = () => {
       <ModalAgregarMascota
         isOpen={modalMascota}
         onClose={() => setModalMascota(false)}
-        onSuccess={() => {}}
+        onSuccess={() => setModalMascota(false)}
+      />
+
+      <ModalEditarMascota
+        isOpen={modalEditar}
+        onClose={() => { setModalEditar(false); setMascotaSeleccionada(null) }}
+        onSuccess={() => { setModalEditar(false); setMascotaSeleccionada(null) }}
+        mascota={mascotaSeleccionada}
       />
     </div>
   )

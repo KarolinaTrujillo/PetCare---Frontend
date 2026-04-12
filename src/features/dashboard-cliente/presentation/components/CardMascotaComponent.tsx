@@ -1,9 +1,13 @@
 'use client'
 
-import { PawPrint, ArrowRight, Tag, Cake, Dna, Scale } from 'lucide-react'
+import { PawPrint, ArrowRight, Tag, Cake, Dna, Scale, Pencil } from 'lucide-react'
 import { Mascota } from '../../domain/entities/mascota.entity'
 import Link from 'next/link'
 import { Routes } from '@/src/core/navigator/routes'
+
+interface CardMascotaComponentProps extends Mascota {
+  onEditar?: () => void
+}
 
 export const CardMascotaComponent = ({
   id,
@@ -14,8 +18,8 @@ export const CardMascotaComponent = ({
   sexo,
   peso,
   activo,
-}: Mascota) => {
-  console.log('mascota id:', id)
+  onEditar,
+}: CardMascotaComponentProps) => {
   const edad = fecha_nacimiento
     ? Math.floor((Date.now() - new Date(fecha_nacimiento).getTime()) / (1000 * 60 * 60 * 24 * 365))
     : null
@@ -60,13 +64,24 @@ export const CardMascotaComponent = ({
 
       </div>
 
-      <Link
-        href={Routes.dashboard.cliente.mascotaDetalle(id)}
-        className="flex items-center gap-1 bg-[#267A6E] hover:bg-[#1d6259] text-white text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer shrink-0"
-      >
-        Ver
-        <ArrowRight size={13} />
-      </Link>
+      <div className="flex items-center gap-2 shrink-0">
+        {onEditar && (
+          <button
+            onClick={onEditar}
+            className="flex items-center gap-1 border border-[#267A6E] text-[#267A6E] hover:bg-[#267A6E]/10 text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
+          >
+            <Pencil size={13} />
+            Editar
+          </button>
+        )}
+        <Link
+          href={Routes.dashboard.cliente.mascotaDetalle(id)}
+          className="flex items-center gap-1 bg-[#267A6E] hover:bg-[#1d6259] text-white text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
+        >
+          Ver
+          <ArrowRight size={13} />
+        </Link>
+      </div>
 
     </div>
   )

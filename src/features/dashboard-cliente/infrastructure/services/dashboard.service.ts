@@ -25,7 +25,7 @@ export const dashboardClienteService = {
         precio_servicio: c.precio,
       }))
   },
-  
+
   getMascotasRecientes: async (): Promise<Mascota[]> => {
     const user = JSON.parse(localStorage.getItem('user') ?? '{}')
     const { data } = await httpClient.get(`/pets/user/${user.id}`)
@@ -41,5 +41,9 @@ export const dashboardClienteService = {
   createCita: async (payload: CreateCitaRequest): Promise<Cita> => {
     const { data } = await httpClient.post<{ success: boolean; data: Cita }>('/citas', payload)
     return data.data
+  },
+
+  updateMascota: async (id: number, payload: Partial<CreateMascotaRequest>): Promise<void> => {
+    await httpClient.put(`/pets/${id}`, payload)
   },
 }

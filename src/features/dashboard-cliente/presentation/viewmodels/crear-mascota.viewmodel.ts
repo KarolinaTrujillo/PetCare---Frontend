@@ -11,14 +11,15 @@ export const useCrearMascotaViewModel = (onSuccess: () => void) => {
   const [isLoading, setIsLoading] = useState(false)
   const { alert, hideAlert, error: showError, success } = useAlert()
 
-  const crearMascota = async (data: CreateMascotaRequest) => {
+  const crearMascota = async (data: CreateMascotaRequest): Promise<boolean> => {
     try {
       setIsLoading(true)
       await createMascotaUseCase.execute(data)
-      success('¡Mascota agregada!', 'Tu mascota fue registrada correctamente.')
-      setTimeout(() => onSuccess(), 1500)
+      success('¡Mascota agregada!', `Tu mascota ${data.nombre} se ha agregado exitosamente.`)
+      return true
     } catch (e: any) {
       showError('Error al agregar mascota', getErrorMessage(e))
+      return false
     } finally {
       setIsLoading(false)
     }

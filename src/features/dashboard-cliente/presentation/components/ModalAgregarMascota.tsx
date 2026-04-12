@@ -18,13 +18,20 @@ export const ModalAgregarMascota = ({ isOpen, onClose, onSuccess }: ModalAgregar
   const [fechaNacimiento, setFechaNacimiento] = useState('')
   const [sexo, setSexo] = useState('')
   const [peso, setPeso] = useState('')
+  const [formError, setFormError] = useState<string | null>(null)
 
   const { crearMascota, isLoading, alert, hideAlert } = useCrearMascotaViewModel(onSuccess)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setFormError(null)
+
+    if (!nombre.trim()) return setFormError('El nombre es obligatorio.')
+    if (!sexo) return setFormError('El sexo es obligatorio.')
+    if (!fechaNacimiento) return setFormError('La fecha de nacimiento es obligatoria.')
+
     const user = JSON.parse(localStorage.getItem('user') ?? '{}')
-    await crearMascota({
+    const ok = await crearMascota({
       id_user: user.id,
       especie,
       nombre,
@@ -33,12 +40,21 @@ export const ModalAgregarMascota = ({ isOpen, onClose, onSuccess }: ModalAgregar
       sexo: sexo || undefined,
       peso: peso ? parseFloat(peso) : undefined,
     })
-    handleClose()
+
+    if (ok) {
+      setTimeout(() => {
+        setNombre(''); setEspecie('Perro'); setRaza('')
+        setFechaNacimiento(''); setSexo(''); setPeso('')
+        setFormError(null)
+        onSuccess()
+      }, 1500)
+    }
   }
 
   const handleClose = () => {
     setNombre(''); setEspecie('Perro'); setRaza('')
     setFechaNacimiento(''); setSexo(''); setPeso('')
+    setFormError(null)
     onClose()
   }
 
@@ -65,21 +81,28 @@ export const ModalAgregarMascota = ({ isOpen, onClose, onSuccess }: ModalAgregar
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-6 py-5">
 
+            {formError && (
+              <p className="text-xs text-red-500 bg-red-50 px-3 py-2 rounded-lg">{formError}</p>
+            )}
+
+            {alert.isVisible && (
+              <p className="text-xs text-green-600 bg-green-50 px-3 py-2 rounded-lg">{alert.message}</p>
+            )}
+
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-700">Nombre</label>
+              <label className="text-sm font-medium text-gray-700">Nombre <span className="text-red-400">*</span></label>
               <input
                 type="text"
                 value={nombre}
                 onChange={e => setNombre(e.target.value)}
                 placeholder="Nombre de tu mascota"
-                required
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-300 outline-none focus:border-[#267A6E] focus:ring-2 focus:ring-[#267A6E]/10 transition-all bg-white"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-gray-700">Especie</label>
+                <label className="text-sm font-medium text-gray-700">Especie <span className="text-red-400">*</span></label>
                 <select
                   value={especie}
                   onChange={e => setEspecie(e.target.value as 'Perro' | 'Gato')}
@@ -91,7 +114,7 @@ export const ModalAgregarMascota = ({ isOpen, onClose, onSuccess }: ModalAgregar
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-gray-700">Sexo</label>
+                <label className="text-sm font-medium text-gray-700">Sexo <span className="text-red-400">*</span></label>
                 <select
                   value={sexo}
                   onChange={e => setSexo(e.target.value)}
@@ -117,7 +140,7 @@ export const ModalAgregarMascota = ({ isOpen, onClose, onSuccess }: ModalAgregar
 
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-gray-700">Fecha de nacimiento</label>
+                <label className="text-sm font-medium text-gray-700">Fecha de nacimiento <span className="text-red-400">*</span></label>
                 <input
                   type="date"
                   value={fechaNacimiento}
