@@ -42,19 +42,15 @@ export const useCitasVetViewModel = () => {
   const [updatingId, setUpdatingId] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [creating, setCreating]     = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const fetchCitas = useCallback(async () => {
     try {
       setIsLoading(true)
-
       const usuario = getUsuarioLocal()
       if (!usuario) throw new Error('No hay sesión activa')
-
       const data = await getCitasUseCase.execute()
-
-      // Filtrar solo las citas que pertenecen al veterinario logueado
       const citasDelVet = data.filter(c => c.id_veterinario === usuario.id)
-
       setCitas(citasDelVet.map(mapToCitaVetProps))
     } catch (e: any) {
       setError(e.message)
@@ -81,7 +77,6 @@ export const useCitasVetViewModel = () => {
     try {
       setCreating(true)
       const nueva = await createCitaUseCase.execute(data)
-      // Solo agregar si la cita nueva pertenece al vet logueado
       const usuario = getUsuarioLocal()
       if (nueva.id_veterinario === usuario?.id) {
         setCitas(prev => [mapToCitaVetProps(nueva), ...prev])
@@ -99,7 +94,7 @@ export const useCitasVetViewModel = () => {
       await deleteCitaUseCase.execute(id)
       setCitas(prev => prev.filter(c => c.id !== id))
     } catch (e: any) {
-      setError(e.message)
+      setDeleteError('No se puede eliminar esta cita porque tiene un historial clínico asociado.')
     } finally {
       setDeletingId(null)
     }
@@ -110,5 +105,6 @@ export const useCitasVetViewModel = () => {
     updatingId, handleUpdateStatus,
     deletingId, handleDeleteCita,
     creating, handleCreateCita,
+    deleteError, clearDeleteError: () => setDeleteError(null),
   }
 }

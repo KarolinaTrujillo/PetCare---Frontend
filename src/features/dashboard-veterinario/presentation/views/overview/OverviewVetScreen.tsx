@@ -15,11 +15,19 @@ export const OverviewVetScreen = () => {
 
   const isLoading = loadingCitas || loadingPacientes
 
-  // Mostrar solo las 5 más recientes en cada tabla
-  const citasRecientes    = citas.slice(0, 5)
-  const pacientesRecientes = pacientes.slice(0, 5)
+  const citasRecientes = [...citas]
+    .filter(c => {
+      const fecha = new Date(c.fecha)
+      const ahora = new Date()
+      return fecha >= ahora
+    })
+    .sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime())
+    .slice(0, 5)
 
-  // Stats
+  const pacientesRecientes = [...pacientes]
+    .slice(-5)
+    .reverse()
+
   const citasHoy = citas.filter(c => {
     const hoy = new Date()
     const fecha = new Date(c.fecha)

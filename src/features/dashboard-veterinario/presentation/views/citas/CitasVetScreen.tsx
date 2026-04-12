@@ -1,7 +1,7 @@
 'use client'
 
 import { NavBarVetComponent } from "../../components/NavBarVet"
-import { CalendarDays, Search, Trash2, Plus, X, Loader2 } from "lucide-react"
+import { CalendarDays, Search, Trash2, X, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { useCitasVetViewModel } from "../../viewmodels/citas.vet.viewmodel"
 import { LoaderOne } from "@/src/core/components/ui/loader"
@@ -40,6 +40,7 @@ export const CitasVetScreen = () => {
         updatingId, handleUpdateStatus,
         deletingId, handleDeleteCita,
         creating, handleCreateCita,
+        deleteError, clearDeleteError,
     } = useCitasVetViewModel()
 
     const [filtro, setFiltro] = useState<string>('TODAS')
@@ -55,6 +56,7 @@ export const CitasVetScreen = () => {
             c.nombre_dueno.toLowerCase().includes(busqueda.toLowerCase()) ||
             c.nombre_servicio.toLowerCase().includes(busqueda.toLowerCase())
         )
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
 
     const handleSubmitCrear = async () => {
         if (!form.id_user || !form.id_mascota || !form.id_servicio || !form.fecha) return
@@ -157,7 +159,6 @@ export const CitasVetScreen = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setConfirmDelete(null)} />
                     <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 z-10">
-
                         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
                             <div className="flex items-center gap-2">
                                 <Trash2 size={18} className="text-red-500" />
@@ -167,10 +168,8 @@ export const CitasVetScreen = () => {
                                 <X size={18} />
                             </button>
                         </div>
-
                         <div className="px-6 py-5 flex flex-col gap-4">
                             <p className="text-sm text-gray-500">Esta acción no se puede deshacer. La cita será eliminada permanentemente.</p>
-
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => setConfirmDelete(null)}
@@ -186,7 +185,25 @@ export const CitasVetScreen = () => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
 
+            {deleteError && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={clearDeleteError} />
+                    <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 z-10 p-6 flex flex-col gap-4">
+                        <div className="flex items-center gap-2">
+                            <Trash2 size={18} className="text-red-500" />
+                            <h2 className="text-base font-bold text-gray-900">No se puede eliminar</h2>
+                        </div>
+                        <p className="text-sm text-gray-500">{deleteError}</p>
+                        <button
+                            onClick={clearDeleteError}
+                            className="w-full text-sm font-semibold text-white bg-[#267A6E] hover:bg-[#1d6259] py-3 rounded-xl transition-colors cursor-pointer"
+                        >
+                            Entendido
+                        </button>
                     </div>
                 </div>
             )}
