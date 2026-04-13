@@ -18,4 +18,8 @@ export const mascotasAdminService = {
       email_propietario: m.email_propietario ?? null,
     }))
   },
+
+  reactivarMascota: async (id: number): Promise<void> => {
+    await httpClient.patch(`/pets/${id}/reactivar`, {})
+  },
 }

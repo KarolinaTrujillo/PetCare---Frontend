@@ -4,15 +4,19 @@ import { useState } from 'react'
 import { NavBarAdminComponent } from '../../components/NavBarAdmin'
 import { usePacientesViewModel } from '../../viewmodels/pacientes.viewmodel'
 import { LoaderOne } from '@/src/core/components/ui/loader'
-import { PawPrint, Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { PawPrint, Search, ChevronLeft, ChevronRight, RotateCcw, X } from 'lucide-react'
+import { mascotasAdminService } from '@/src/features/dashboard-admin/infrastructure/services/mascotas.service'
+import { MascotaAdmin } from '../../../domain/entities/mascota.entity'
 
 const ITEMS_PER_PAGE = 10
 
 export const PacientesAdminScreen = () => {
-  const { mascotas, isLoading, error } = usePacientesViewModel()
+  const { mascotas, isLoading, error, refetch } = usePacientesViewModel()
   const [busqueda, setBusqueda] = useState('')
   const [filtroEspecie, setFiltroEspecie] = useState<'TODAS' | 'Perro' | 'Gato'>('TODAS')
   const [pagina, setPagina] = useState(1)
+  const [mascotaAReactivar, setMascotaAReactivar] = useState<MascotaAdmin | null>(null)
+  const [isReactivating, setIsReactivating] = useState(false)
 
   const mascotasFiltradas = mascotas
     .filter(m => filtroEspecie === 'TODAS' || m.especie === filtroEspecie)
@@ -27,6 +31,20 @@ export const PacientesAdminScreen = () => {
     (pagina - 1) * ITEMS_PER_PAGE,
     pagina * ITEMS_PER_PAGE
   )
+
+  const handleConfirmarReactivar = async () => {
+    if (!mascotaAReactivar) return
+    try {
+      setIsReactivating(true)
+      await mascotasAdminService.reactivarMascota(mascotaAReactivar.id)
+      setMascotaAReactivar(null)
+      refetch()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsReactivating(false)
+    }
+  }
 
   if (isLoading) {
     return (
@@ -99,6 +117,7 @@ export const PacientesAdminScreen = () => {
                   <th className="px-6 py-4 text-left font-semibold">Peso</th>
                   <th className="px-6 py-4 text-left font-semibold">Propietario</th>
                   <th className="px-6 py-4 text-left font-semibold">Estado</th>
+                  <th className="px-6 py-4 text-left font-semibold"></th>
                 </tr>
               </thead>
               <tbody>
@@ -122,10 +141,21 @@ export const PacientesAdminScreen = () => {
                         {m.activo ? 'Activo' : 'Inactivo'}
                       </span>
                     </td>
+                    <td className="px-6 py-4">
+                      {!m.activo && (
+                        <button
+                          onClick={() => setMascotaAReactivar(m)}
+                          className="w-8 h-8 flex items-center justify-center rounded-full text-[#267A6E] hover:bg-[#267A6E]/10 transition-colors cursor-pointer"
+                          title="Reactivar mascota"
+                        >
+                          <RotateCcw size={15} />
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 )) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-sm text-gray-400">
+                    <td colSpan={8} className="px-6 py-12 text-center text-sm text-gray-400">
                       No se encontraron pacientes
                     </td>
                   </tr>
@@ -152,6 +182,43 @@ export const PacientesAdminScreen = () => {
         </div>
 
       </div>
+
+      {mascotaAReactivar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMascotaAReactivar(null)} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 z-10">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <RotateCcw size={18} className="text-[#267A6E]" />
+                <h2 className="text-base font-bold text-gray-900">¿Reactivar mascota?</h2>
+              </div>
+              <button onClick={() => setMascotaAReactivar(null)} className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="px-6 py-5 flex flex-col gap-4">
+              <p className="text-sm text-gray-500">
+                ¿Quieres activar a la mascota <strong>{mascotaAReactivar.nombre}</strong>? Volverá a aparecer activa para su propietario.
+              </p>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setMascotaAReactivar(null)}
+                  className="flex-1 text-sm font-semibold text-gray-500 border border-gray-200 py-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirmarReactivar}
+                  disabled={isReactivating}
+                  className="flex-1 text-sm font-semibold text-white bg-[#267A6E] hover:bg-[#1d6259] disabled:opacity-60 py-3 rounded-xl transition-colors cursor-pointer"
+                >
+                  {isReactivating ? 'Reactivando...' : 'Sí, reactivar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

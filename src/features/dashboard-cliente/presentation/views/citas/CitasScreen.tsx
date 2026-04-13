@@ -11,7 +11,7 @@ import { LoaderOne } from "@/src/core/components/ui/loader"
 import { ModalAgendarCita } from '../../components/ModalAgendarCita'
 import { useMascotasViewModel } from '../../viewmodels/mascotas.viewmodel'
 
-const estadoOpciones = ['TODAS', 'PENDIENTE', 'CONFIRMADA', 'CANCELADA', 'COMPLETADA'] as const
+const estadoOpciones = ['TODAS', 'PENDIENTE', 'CONFIRMADA', 'CANCELADA', 'COMPLETADA', 'ATENDIDA'] as const
 
 const estadoStyles: Record<string, string> = {
   TODAS:      'bg-gray-100 text-gray-600',
@@ -19,6 +19,7 @@ const estadoStyles: Record<string, string> = {
   CONFIRMADA: 'bg-green-100 text-green-700',
   CANCELADA:  'bg-red-100 text-red-700',
   COMPLETADA: 'bg-blue-100 text-blue-700',
+  ATENDIDA:   'bg-blue-100 text-blue-700',
 }
 
 export const CitasScreen = () => {
@@ -35,6 +36,7 @@ export const CitasScreen = () => {
       (c.nombre_dueno ?? '').toLowerCase().includes(busqueda.toLowerCase()) ||
       (c.nombre_servicio ?? '').toLowerCase().includes(busqueda.toLowerCase())
     )
+    .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
 
   if (isLoading) {
     return (
