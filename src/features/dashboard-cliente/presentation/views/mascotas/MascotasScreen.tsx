@@ -3,21 +3,23 @@
 import { NavBarComponent } from "../../components/NavBar"
 import { CardMascotaComponent } from "../../components/CardMascotaComponent"
 import { WordRotateConfetti } from "@/src/core/components/ui/WordRotateConfetti"
-import { PawPrint, Search } from "lucide-react"
+import { PawPrint, Search, Trash2, X } from "lucide-react"
 import { useState } from "react"
 import { useMascotasViewModel } from "../../viewmodels/mascotas.viewmodel"
 import { LoaderOne } from "@/src/core/components/ui/loader"
 import { ModalAgregarMascota } from '../../components/ModalAgregarMascota'
 import { ModalEditarMascota } from '../../components/ModalEditarMascota'
 import { Mascota } from '@/src/features/dashboard-cliente/domain/entities/mascota.entity'
-
+import { dashboardClienteService } from '@/src/features/dashboard-cliente/infrastructure/services/dashboard.service'
 export const MascotasScreen = () => {
-  const { mascotas, isLoading, error } = useMascotasViewModel()
+  const { mascotas, isLoading, error, refetch } = useMascotasViewModel()
   const [busqueda, setBusqueda] = useState('')
   const [filtroEspecie, setFiltroEspecie] = useState<'TODAS' | 'Perro' | 'Gato'>('TODAS')
   const [modalMascota, setModalMascota] = useState(false)
   const [modalEditar, setModalEditar] = useState(false)
   const [mascotaSeleccionada, setMascotaSeleccionada] = useState<Mascota | null>(null)
+  const [mascotaAEliminar, setMascotaAEliminar] = useState<Mascota | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const mascotasFiltradas = mascotas
     .filter(m => filtroEspecie === 'TODAS' || m.especie === filtroEspecie)
@@ -27,6 +29,20 @@ export const MascotasScreen = () => {
   const handleEditar = (mascota: Mascota) => {
     setMascotaSeleccionada(mascota)
     setModalEditar(true)
+  }
+
+  const handleConfirmarEliminar = async () => {
+    if (!mascotaAEliminar) return
+    try {
+      setIsDeleting(true)
+      await dashboardClienteService.deleteMascota(mascotaAEliminar.id)
+      setMascotaAEliminar(null)
+      refetch()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   if (isLoading) {
@@ -108,6 +124,7 @@ export const MascotasScreen = () => {
                 key={m.id}
                 {...m}
                 onEditar={() => handleEditar(m)}
+                onEliminar={() => setMascotaAEliminar(m)}
               />
             ))}
           </div>
@@ -142,9 +159,46 @@ export const MascotasScreen = () => {
       <ModalEditarMascota
         isOpen={modalEditar}
         onClose={() => { setModalEditar(false); setMascotaSeleccionada(null) }}
-        onSuccess={() => { setModalEditar(false); setMascotaSeleccionada(null) }}
+        onSuccess={() => { setModalEditar(false); setMascotaSeleccionada(null); refetch() }}
         mascota={mascotaSeleccionada}
       />
+
+      {mascotaAEliminar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMascotaAEliminar(null)} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 z-10">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <Trash2 size={18} className="text-red-500" />
+                <h2 className="text-base font-bold text-gray-900">¿Eliminar mascota?</h2>
+              </div>
+              <button onClick={() => setMascotaAEliminar(null)} className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="px-6 py-5 flex flex-col gap-4">
+              <p className="text-sm text-gray-500">
+                ¿Quieres eliminar a tu mascota <strong>{mascotaAEliminar.nombre}</strong>? Esta acción no se puede deshacer.
+              </p>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setMascotaAEliminar(null)}
+                  className="flex-1 text-sm font-semibold text-gray-500 border border-gray-200 py-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirmarEliminar}
+                  disabled={isDeleting}
+                  className="flex-1 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 disabled:opacity-60 py-3 rounded-xl transition-colors cursor-pointer"
+                >
+                  {isDeleting ? 'Eliminando...' : 'Eliminar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,24 +1,17 @@
 'use client'
 
-import { PawPrint, ArrowRight, Tag, Cake, Dna, Scale, Pencil } from 'lucide-react'
+import { PawPrint, ArrowRight, Tag, Cake, Dna, Scale, Pencil, Trash2 } from 'lucide-react'
 import { Mascota } from '../../domain/entities/mascota.entity'
 import Link from 'next/link'
 import { Routes } from '@/src/core/navigator/routes'
 
 interface CardMascotaComponentProps extends Mascota {
   onEditar?: () => void
+  onEliminar?: () => void
 }
 
 export const CardMascotaComponent = ({
-  id,
-  nombre,
-  especie,
-  raza,
-  fecha_nacimiento,
-  sexo,
-  peso,
-  activo,
-  onEditar,
+  id, nombre, especie, raza, fecha_nacimiento, sexo, peso, activo, onEditar, onEliminar
 }: CardMascotaComponentProps) => {
   const edad = fecha_nacimiento
     ? Math.floor((Date.now() - new Date(fecha_nacimiento).getTime()) / (1000 * 60 * 60 * 24 * 365))
@@ -32,7 +25,6 @@ export const CardMascotaComponent = ({
       </div>
 
       <div className="flex flex-col gap-2 flex-1 min-w-0">
-
         <div className="flex items-center justify-between">
           <span className="text-gray-900 font-bold text-base">{nombre}</span>
           <span className={`text-xs font-semibold px-3 py-1 rounded-full ${activo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -45,23 +37,19 @@ export const CardMascotaComponent = ({
             <Tag size={14} className="text-[#267A6E] shrink-0" />
             <span className="truncate">{especie} · {sexo ?? '—'}</span>
           </div>
-
           <div className="flex items-center gap-2 truncate">
             <Dna size={14} className="text-[#267A6E] shrink-0" />
             <span className="truncate">{raza ?? 'Sin raza'}</span>
           </div>
-
           <div className="flex items-center gap-2 truncate">
             <Cake size={14} className="text-[#267A6E] shrink-0" />
             <span className="truncate">{edad !== null ? `${edad} ${edad === 1 ? 'año' : 'años'}` : '—'}</span>
           </div>
-
           <div className="flex items-center gap-2 truncate">
             <Scale size={14} className="text-[#267A6E] shrink-0" />
             <span className="truncate">{peso ? `${peso} kg` : '—'}</span>
           </div>
         </div>
-
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
@@ -72,6 +60,14 @@ export const CardMascotaComponent = ({
           >
             <Pencil size={13} />
             Editar
+          </button>
+        )}
+        {onEliminar && (
+          <button
+            onClick={onEliminar}
+            className="flex items-center gap-1 border border-red-400 text-red-400 hover:bg-red-50 text-xs font-semibold px-3 py-2 rounded-xl transition-colors cursor-pointer"
+          >
+            <Trash2 size={13} />
           </button>
         )}
         <Link

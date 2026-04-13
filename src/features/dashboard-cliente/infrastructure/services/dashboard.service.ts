@@ -46,4 +46,8 @@ export const dashboardClienteService = {
   updateMascota: async (id: number, payload: Partial<CreateMascotaRequest>): Promise<void> => {
     await httpClient.put(`/pets/${id}`, payload)
   },
+
+  deleteMascota: async (id: number): Promise<void> => {
+    await httpClient.delete(`/pets/${id}`)
+  },
 }
