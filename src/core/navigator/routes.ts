@@ -1,5 +1,6 @@
 export const Routes = {
   landing: '/',
+  terminos: '/terminos',
   auth: {
     login: '/login',
     register: '/register',

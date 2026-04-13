@@ -8,6 +8,8 @@ import { Eye, EyeOff, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import Link from 'next/link'
 
+const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/
+
 export const RegisterScreen = () => {
   const { register, isLoading, alert: alertState, hideAlert } = useRegisterViewModel()
   const [showPassword, setShowPassword] = useState(false)
@@ -18,11 +20,18 @@ export const RegisterScreen = () => {
   const [telefono, setTelefono] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [aceptaTerminos, setAceptaTerminos] = useState(false)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (password !== confirmPassword) {
       return alert('Las contraseñas no coinciden')
+    }
+    if (!passwordRegex.test(password)) {
+      return alert('La contraseña debe tener mínimo 8 caracteres, incluir letras, números y al menos un carácter especial (!@#$%...)')
+    }
+    if (!aceptaTerminos) {
+      return alert('Debes aceptar los términos y condiciones para continuar.')
     }
     register({ nombre, apellido, email, telefono, password })
   }
@@ -107,6 +116,7 @@ export const RegisterScreen = () => {
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
+                <p className="text-xs text-gray-400">Mínimo 8 caracteres, con letras, números y un carácter especial (!@#$%...)</p>
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -120,7 +130,24 @@ export const RegisterScreen = () => {
                 </div>
               </div>
 
-              <button type="submit" disabled={isLoading}
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="terminos"
+                  checked={aceptaTerminos}
+                  onChange={e => setAceptaTerminos(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 accent-[#267A6E] cursor-pointer"
+                />
+                <label htmlFor="terminos" className="text-sm text-gray-500 cursor-pointer">
+                  Acepto los{' '}
+                  <Link href={Routes.terminos} target="_blank" className="text-[#267A6E] font-medium hover:underline">
+                    Términos y condiciones
+                  </Link>
+                  {' '}de PetCare
+                </label>
+              </div>
+
+              <button type="submit" disabled={isLoading || !aceptaTerminos}
                 className="bg-[#267A6E] hover:bg-[#1d6259] disabled:opacity-60 text-white text-sm font-semibold py-3 rounded-xl transition-colors mt-2 cursor-pointer flex items-center justify-center gap-2">
                 <UserPlus size={16} />
                 {isLoading ? 'Creando cuenta...' : 'Crear cuenta'}
